@@ -32,6 +32,15 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="nearby"
+        options={{
+          title: 'Nearby',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'bluetooth' : 'bluetooth-outline'} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
