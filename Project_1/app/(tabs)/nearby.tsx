@@ -1,16 +1,14 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { StyleSheet, Image, Platform, Button } from 'react-native';
-
-import { Collapsible } from '@/components/Collapsible';
-import { ExternalLink } from '@/components/ExternalLink';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { requestPermsBluetooth } from '@/lib/bluetooth';
+import { requestPermBlue } from '@/lib/bluetooth';
 
-const setUpBluetoothConnection = () => {
-    requestPermsBluetooth();
-} 
+async function setUpBluetoothConnection() {
+  console.log("Start of function");
+  await requestPermBlue();
+}
 
 export default function TabTwoScreen() {
   return (
@@ -22,7 +20,7 @@ export default function TabTwoScreen() {
       </ThemedView>
       <ThemedText type="subtitle">Connect with nearby users to find games, which you share in common!</ThemedText>
       <ThemedText>Press the button to get started with bluetooth mode!</ThemedText>
-      <Button title="Get Started" onPress={setUpBluetoothConnection}/>
+      <Button title="Get Started" onPress={setUpBluetoothConnection} />
     </ParallaxScrollView>
   );
 }

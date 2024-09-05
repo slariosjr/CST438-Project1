@@ -1,5 +1,5 @@
 import { PermissionsAndroid, Platform } from "react-native";
-
+import * as Device from 'expo-device';
 
 const requestAndroid31Permissions = async () => {
     const bluetoothScanPermission = await PermissionsAndroid.request(
@@ -34,9 +34,10 @@ const requestAndroid31Permissions = async () => {
     );
   };
 
-  const requestPermissions = async () => {
+export const requestPermBlue = async () => {
     if (Platform.OS === "android") {
-      if ((ExpoDevice.platformApiLevel ?? -1) < 31) {
+      console.log("We got to line 39~");
+      if ((Device.platformApiLevel ?? -1) < 31) {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
           {
@@ -53,6 +54,6 @@ const requestAndroid31Permissions = async () => {
         return isAndroid31PermissionsGranted;
       }
     } else {
-      return true;
+      return false;
     }
   };
