@@ -46,12 +46,12 @@ export const requestPermBlue = async () => {
             buttonPositive: "OK",
           }
         );
-        return granted === PermissionsAndroid.RESULTS.GRANTED;
+        return Boolean(granted === PermissionsAndroid.RESULTS.GRANTED);
       } else {
         const isAndroid31PermissionsGranted =
           await requestAndroid31Permissions();
 
-        return isAndroid31PermissionsGranted;
+        return Boolean(isAndroid31PermissionsGranted);
       }
     } else {
       return false;

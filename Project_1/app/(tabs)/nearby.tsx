@@ -5,9 +5,18 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { requestPermBlue } from '@/lib/bluetooth';
 
+
+let bluetoothEnable = false;
+
 async function setUpBluetoothConnection() {
   console.log("Start of func");
-  await requestPermBlue();
+  bluetoothEnable = await requestPermBlue();
+  if(bluetoothEnable) {
+    console.log("BLUETOOTH YES!")
+  } else {
+    console.log("BLUETOOTH NO!")
+  }
+
 }
 
 export default function TabTwoScreen() {
