@@ -6,7 +6,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { requestPermBlue } from '@/lib/bluetooth';
 
 async function setUpBluetoothConnection() {
-  console.log("Start of function");
+  console.log("Start of func");
   await requestPermBlue();
 }
 
