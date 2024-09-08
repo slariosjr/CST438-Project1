@@ -14,8 +14,6 @@ let lookForConnect = false;
 // To the person whos reading this for code review, 
 // I type funny comment, because funny comment is memorable.
 
-// "Okay imagine, a CS Boys love dating game"
-// -  Alex~
 export default function NearbyScreen() {
   const [listConnections, ableToConnect] = useState(lookForConnect);
   // Faker than Faker.js
@@ -28,7 +26,7 @@ export default function NearbyScreen() {
     console.log("fakedata:", data);
   }, [lookForConnect]);
 
-  // // Set the fucker up!
+  // // Set the zucker up!
   const handleConnection = (): Promise<boolean> => {
     return new Promise<boolean>(() => {
       return false;
@@ -42,7 +40,7 @@ export default function NearbyScreen() {
   // }
 
   return (
-    // this was a fucking pain in my ass to get working.. 
+    // this was a zucking pain in my Zuckerburg to get working.. 
     // https://youtu.be/sJhtJaUQTg0?si=lMOvR7Bd1Une2GKi
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#8370ff', dark: '#6047ff' }}

@@ -16,8 +16,6 @@ export const startServer = () => {
     socket.bind(UDP_PORT);
 }
 
-// I love how I have to program my own IP grabber!
-// Brings me back to my High school days!
 export const getIPAddress = async (): Promise<string> => {
     try {
         const IP = await NetworkInfo.getIPV4Address();
