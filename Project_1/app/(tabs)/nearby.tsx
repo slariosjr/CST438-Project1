@@ -42,7 +42,7 @@ export default function NearbyScreen() {
   // }
 
   return (
-    // this was a fucking pain in my ass to set up, I rather shove a catcus up my ass. 
+    // this was a fucking pain in my ass to get working.. 
     // https://youtu.be/sJhtJaUQTg0?si=lMOvR7Bd1Une2GKi
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#8370ff', dark: '#6047ff' }}
@@ -52,13 +52,13 @@ export default function NearbyScreen() {
       }
       {lookForConnect && listConnections && <>
         <ThemedText type="title">Available Connections</ThemedText>
-        <ThemedText type="subtitle">looking for connections..  d</ThemedText>
+        <ThemedText type="subtitle">looking for connections</ThemedText>
       </>}
     </ParallaxScrollView>
   );
 }
 
-// Fuck CSS, me and zuck and finally agree on something as soon his lizard tongue stops licking my ear joe biden style. 
+// Screw CSS, me and zuck finally agree on something. 
 const styles = StyleSheet.create({
   headerImage: {
     bottom: -90,
