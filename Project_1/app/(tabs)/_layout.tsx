@@ -37,7 +37,7 @@ export default function TabLayout() {
         options={{
           title: 'Nearby',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'bluetooth' : 'bluetooth-outline'} color={color} />
+            <TabBarIcon name={focused ? 'link' : 'link-outline'} color={color} />
           ),
         }}
       />
