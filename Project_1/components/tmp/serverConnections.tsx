@@ -1,15 +1,13 @@
-import { StyleProp, FlatList, Button, Alert } from 'react-native';
-import { ThemedText } from '../ThemedText';
+import { StyleProp, FlatList, Button } from 'react-native';
 import { ThemedView } from '../ThemedView';
-import { connection } from '@/lib/bluetooth';
 
 // Typescript is really nice, until it ain't.. 
 // Good songs: https://youtu.be/wnMG27_-g6s?si=6FRZZMkX4jyibxAH
-export default function BluetoothConnections(props: {
-        style: StyleProp<any>,
-        connections: connection[],
-        connectAlert: (name: string) => void
-    }): React.JSX.Element {
+export default function serverConnections(props: {
+    style: StyleProp<any>,
+    connections: any[],
+    connectAlert: (name: string) => void
+}): React.JSX.Element {
     return (
         <FlatList
             scrollEnabled={false}

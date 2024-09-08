@@ -1,14 +1,14 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { StyleSheet} from 'react-native';
+import { Button, StyleSheet } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
-import { connectAlert, connection, requestPermBlue, scanNearby } from '@/lib/bluetooth';
 import { useEffect, useState } from 'react';
-import BluetoothSetupComp from '@/components/bluetooth/blueSetup';
-import BluetoothConnections from '@/components/bluetooth/blueConnect';
+import SetupConnections from '@/components/localServer/SetupConnections';
+import { useColorScheme } from '@/hooks/useColorScheme';
+
 
 // Honestly, I just don't know a better way to do this.. 
-let bluetoothEnabled = false;
+let lookForConnect = false;
 
 
 // To the person whos reading this for code review, 
@@ -16,43 +16,43 @@ let bluetoothEnabled = false;
 
 // "Okay imagine, a CS Boys love dating game"
 // -  Alex~
-export default function BluetoothScreen() {
-  const [isConnected, setIsConnected] = useState(bluetoothEnabled);
+export default function NearbyScreen() {
+  const [listConnections, ableToConnect] = useState(lookForConnect);
   // Faker than Faker.js
-  let data: connection[] = []
+  let data: any[] = []
   useEffect(() => {
-    setIsConnected(bluetoothEnabled);
+    ableToConnect(lookForConnect);
     console.log("useEffect triggered");
-    console.log("bluetoothEnabled:", bluetoothEnabled);
-    console.log("isConnected:", isConnected);
+    console.log("Currently looking for connections:", lookForConnect);
+    console.log("isConnected:", listConnections);
     console.log("fakedata:", data);
-  }, [bluetoothEnabled]);
+  }, [lookForConnect]);
 
-  // Set the fucker up!
-  const setupConnection = async (): Promise<boolean> => {
-    bluetoothEnabled = await requestPermBlue();
-    if (bluetoothEnabled) {
-      console.log("BLUETOOTH YES!")
-      setIsConnected(true);
-      scanNearby();
-    } else {
-      console.log("BLUETOOTH NO!")
-      setIsConnected(false);
-    }
-    return bluetoothEnabled;
+  // // Set the fucker up!
+  const handleConnection = (): Promise<boolean> => {
+    return new Promise<boolean>(() => {
+      return false;
+    });
   }
+  const setUpConnections = () => {
+    console.log("Setup Connections")
+    lookForConnect = true;
+    ableToConnect(true);
+  }
+  // }
 
   return (
     // this was a fucking pain in my ass to set up, I rather shove a catcus up my ass. 
     // https://youtu.be/sJhtJaUQTg0?si=lMOvR7Bd1Une2GKi
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#007ce8', dark: '#004785' }}
-      headerImage={<Ionicons size={310} name="bluetooth" style={styles.headerImage} />}>
-      {!bluetoothEnabled && !isConnected && <BluetoothSetupComp setUpBluetoothConnection={setupConnection} style={styles} />}
-      {bluetoothEnabled && isConnected && <>
+      headerBackgroundColor={{ light: '#8370ff', dark: '#6047ff' }}
+      headerImage={<Ionicons size={310} name="link" style={styles.headerImage} color={'#232323'} />}>
+      {!lookForConnect && !listConnections &&
+        <SetupConnections style={styles} startConnection={setUpConnections}/>
+      }
+      {lookForConnect && listConnections && <>
         <ThemedText type="title">Available Connections</ThemedText>
-        <ThemedText type="subtitle">Tap on them to connect!</ThemedText>
-        <BluetoothConnections connections={data} connectAlert={connectAlert} style={styles}/>
+        <ThemedText type="subtitle">looking for connections..  d</ThemedText>
       </>}
     </ParallaxScrollView>
   );
@@ -61,19 +61,22 @@ export default function BluetoothScreen() {
 // Fuck CSS, me and zuck and finally agree on something as soon his lizard tongue stops licking my ear joe biden style. 
 const styles = StyleSheet.create({
   headerImage: {
-    color: '#00274a',
     bottom: -90,
     left: -35,
     position: 'absolute',
   },
   titleContainer: {
     flexDirection: 'row',
+    paddingVertical: 2,
     gap: 8,
   },
-  ButtonContainer: {
+  buttonContainer: {
     padding: 10,
   },
-  Button: {
-    color: '#00549e',
+  buttonLight: {
+    color: '#8370ff',
+  },
+  buttonDark: {
+    color: '#6047ff',
   }
 });
