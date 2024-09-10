@@ -11,12 +11,13 @@ export const PROTOCALLS = {
     78: "ACCOUNT-TRANSFER",
 };
 
-export const startServer = () => {
+export const startServer = () :UdpSocket => {
     let socket = UdpSocket.createSocket({ type: 'udp4' });
     socket.bind(UDP_PORT);
+    return socket;
 }
 
-export const getIPAddress = async (): Promise<string> => {
+export const getIPAddress = async () :Promise<string> => {
     try {
         const IP = await NetworkInfo.getIPV4Address();
         if (IP == null) throw new Error("Didn't get the IP");
