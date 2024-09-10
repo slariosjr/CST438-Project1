@@ -41,6 +41,15 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="gameDetails"
+        options={{
+          title: 'Game Details',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'tv' : 'tv-outline'} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
