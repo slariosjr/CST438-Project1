@@ -6,7 +6,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigation } from 'expo-router';
 
-
+// API getGames Function 
 const getGames = async (limit, offset) => {
   const URL = "https://api.igdb.com/v4/games/";
 
@@ -41,13 +41,12 @@ export default function TabTwoScreen() {
   // see if more games are able to fetch
   const [hasMore, setHasMore] = useState(true); 
 
-  //  fetch games and update state
+  // Function: fetch games and update state
   const fetchGames = useCallback(async () => {
     if (loading || !hasMore) return;
     setLoading(true);
     // get 10 games at a time 
     const newGames = await getGames(10, offset); 
-
     setGames(prevGames => [...prevGames, ...newGames]);
     // save previous games 
     setOffset(prevOffset => prevOffset + 10); 
@@ -63,10 +62,11 @@ export default function TabTwoScreen() {
     fetchGames();
   }, []); 
 
-  // load more games button press
+  // Function load more games button press
   const loadMoreGames = () => {
     fetchGames();
   };
+  //navigation for going to a different screen 
   let navigation = useNavigation();
   
   // when game is clicked, bring user to a game details page with the game ID 

@@ -20,7 +20,6 @@ export default function GameDetailsScreen({route, navigation}) {
         <Text>{gameId}</Text>
         <Button title="Save Game" />
       </ThemedView>
-
     </ParallaxScrollView>
   );
 }
