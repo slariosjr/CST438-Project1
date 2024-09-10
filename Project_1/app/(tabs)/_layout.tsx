@@ -32,15 +32,6 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="nearby"
-        options={{
-          title: 'Nearby',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'link' : 'link-outline'} color={color} />
-          ),
-        }}
-      />
     </Tabs>
   );
 }
