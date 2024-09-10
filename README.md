@@ -1,8 +1,20 @@
-# Welcome to your Expo app 👋
+# Bun-dle
+<hr>
+Bun-dle is a app to view your video game collection locally! 
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
-## Get started
+You can use this app on Android, IOS, and the Web!
+
+<hr>
+
+## Running the project:
+
+### Prequesites:
+
+- Node.js and npm: Ensure you have Node.js and npm (Node Package Manager) installed on your system. You can download them from https://nodejs.org/en/download/package-manager.  
+- Expo CLI: Install the Expo CLI globally: 
+
+#### Installation Directions:
 1. Change directories into ../Project_1
    ```bash
    cd Project_1
@@ -18,11 +30,3 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    ```bash
     npx expo start
    ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
