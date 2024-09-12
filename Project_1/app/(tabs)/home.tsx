@@ -1,5 +1,5 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { StyleSheet, Image, Platform, Button, Alert, TouchableOpacity, View, ScrollView, Text } from 'react-native';
+import { StyleSheet, Image, Platform, Button, Alert, TouchableOpacity, View, ScrollView, Text, TextInput } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -7,6 +7,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigation } from 'expo-router';
 
 // API getGames Function 
+<<<<<<< HEAD
+const getGames = async (limit, offset, search = '') => {
+=======
 type game= {
   id: number,
   cover: {
@@ -19,6 +22,7 @@ type game= {
 
 
 const getGames = async (limit: Number, offset: Number) => {
+>>>>>>> d1a5f0a4908e8ced51a85ec37ae7545dd2ff735b
   const URL = "https://api.igdb.com/v4/games/";
 
   try {
@@ -29,11 +33,13 @@ const getGames = async (limit: Number, offset: Number) => {
         'Client-ID': 'ydvyzcbct3xmsd2z1yqvygldviukst',
         'Authorization': 'Bearer rc2i6kl8y3gtscgcru9dgfyzrf7z2z',
       },
-      body: `fields name, cover.url; limit ${limit}; offset ${offset};`
+      body: `fields name, cover.url, summary, storyline;
+          where cover.url != null & summary != null & storyline != null & name ~*"${search}"*;  
+          limit ${limit}; offset ${offset};`
     });
 
     const data = await response.json();
-    console.log(data); // log the data
+    // console.log(data); 
     return data;
   } catch (error) {
     console.error('Error fetching games:', error);
@@ -51,14 +57,21 @@ export default function TabTwoScreen() {
   const [loading, setLoading] = useState(false); 
   // see if more games are able to fetch
   const [hasMore, setHasMore] = useState(true); 
+  // search state 
+  const [search, setSearch] = useState('');
 
   // Function: fetch games and update state
-  const fetchGames = useCallback(async () => {
+  const fetchGames = useCallback(async (newSearch = '') => {
     if (loading || !hasMore) return;
     setLoading(true);
     // get 10 games at a time 
+<<<<<<< HEAD
+    const newGames = await getGames(10, offset, newSearch); 
+    setGames(prevGames => [...prevGames, ...newGames]);
+=======
     const newGames = await getGames(10, offset); 
     setGames(prevGames => [...prevGames, ...newGames] as never);
+>>>>>>> d1a5f0a4908e8ced51a85ec37ae7545dd2ff735b
     // save previous games 
     setOffset(prevOffset => prevOffset + 10); 
     if (newGames.length < 10) {
@@ -73,14 +86,29 @@ export default function TabTwoScreen() {
     fetchGames();
   }, []); 
 
-  // Function load more games button press
+  // Function load more games button press with search
   const loadMoreGames = () => {
-    fetchGames();
+    fetchGames(search);
   };
+
+  const handleSearch = () => {
+    setGames([]);
+    setOffset(0);
+    setHasMore(true);
+    fetchGames(search);
+  }
+
   //navigation for going to a different screen 
   let navigation = useNavigation();
   
   // when game is clicked, bring user to a game details page with the game ID 
+<<<<<<< HEAD
+  const onGameImageClick = (game) => {
+     // check if the game has a cover and if the cover has a URL
+    const coverUrl = game.cover && game.cover.url ? game.cover.url : 'https://static.thenounproject.com/png/11204-200.png';
+    // navigate to game details page with parameters
+    navigation.navigate('gameDetails', {gameId: game.id, cover: coverUrl, gameName: game.name, gameStoryline: game.storyline, gameSummary: game.summary });
+=======
   const onGameImageClick = (game: game) => {
     console.log(JSON.stringify(game));
     Alert.alert(`Game Selected`, `You clicked on ${game.name} with game ID: ${game.id}`);
@@ -89,6 +117,7 @@ export default function TabTwoScreen() {
     // Type script is throwing a tantrum over this 
     // @ts-ignore
     navigation.navigate('gameDetails', {gameId:  game.id});
+>>>>>>> d1a5f0a4908e8ced51a85ec37ae7545dd2ff735b
   };
 
   return (
@@ -98,6 +127,20 @@ export default function TabTwoScreen() {
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">All Games</ThemedText>
       </ThemedView>
+    {/* Search Bar */}
+    <View style={styles.searchContainer}>
+      <TextInput
+        style = {styles.searchInput}
+        placeholder = "Search for a game!"
+        value = {search}
+        onChangeText = {setSearch}
+      />
+      <TouchableOpacity onPress={handleSearch}>
+        <Ionicons name="search" size={24} color="black" />
+      </TouchableOpacity>
+    </View>
+
+
       <ThemedText>Here a full list of video games will be displayed!</ThemedText>
       <ScrollView contentContainerStyle={styles.gameList}>
         {/* for each game make it a clickable item with the game cover and the name */}
@@ -111,7 +154,11 @@ export default function TabTwoScreen() {
                   resizeMode="cover"
                 />
               ) : (
-                <Ionicons name="image" size={50} color="#808080" />
+                <Image
+                  source={{ uri: `https://static.thenounproject.com/png/11204-200.png` }}
+                  style={styles.gameIcon}
+                  resizeMode="cover"
+                />
               )}
               <ThemedText style={styles.gameTitle}>{game.name}</ThemedText>
             </View>
@@ -137,6 +184,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 8,
   },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: 10,
+    padding: 5,
+    borderRadius: 5,
+    backgroundColor: '#E0E0E0',
+  },
+  searchInput: {
+    flex: 1,
+    padding: 5,
+    fontSize: 16,
+  },
   gameItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -146,9 +206,11 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginRight: 10,
+    borderRadius: 8,
   },
   gameTitle: {
     fontSize: 18,
+    color: '#FFFFFF',
   },
   gameList: {
     padding: 10,
