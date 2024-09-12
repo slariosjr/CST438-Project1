@@ -175,9 +175,11 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginRight: 10,
+    borderRadius: 8,
   },
   gameTitle: {
     fontSize: 18,
+    color: '#FFFFFF',
   },
   gameList: {
     padding: 10,

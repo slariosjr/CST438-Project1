@@ -47,9 +47,9 @@ export default function GameDetailsScreen({route}) {
               <Ionicons name="image" size={50} color="#808080" />
             )}
             <Text style={styles.gameTitle}>{gameName}</Text>
-            <Text>Game ID: {gameId}</Text>
-            <Text>Description: {gameSummary}</Text>
-            <Text>Storyline: {gameStoryline}</Text>
+            <Text style={styles.gameInfo}>Game ID: {gameId}</Text>
+            <Text style={styles.gameInfo}>Description: {gameSummary}</Text>
+            <Text style={styles.gameInfo}>Storyline: {gameStoryline}</Text>
           </View>
           {/* Save Button */}
         <Button 
@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
   },
   headerTitle:{
     right:-45,
+    top: -8,
   },
   backButton: {
     position: 'absolute',
@@ -87,10 +88,17 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
     alignSelf: 'center',
+    borderRadius: 8,
+  },
+  gameInfo:{
+    fontSize: 12,
+    textAlign: 'left',
+    color: '#FFFFFF',
   },
   gameTitle: {
     fontSize: 18,
-    textAlign: 'center'
+    textAlign: 'center',
+    color: '#FFFFFF',
   },
   gameItem: {
     flexDirection: 'row',
