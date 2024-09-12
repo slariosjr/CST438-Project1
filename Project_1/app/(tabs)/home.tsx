@@ -113,7 +113,7 @@ export default function TabTwoScreen() {
               ) : (
                 <Ionicons name="image" size={50} color="#808080" />
               )}
-              <Text style={styles.gameTitle}>{game.name}</Text>
+              <ThemedText style={styles.gameTitle}>{game.name}</ThemedText>
             </View>
           </TouchableOpacity>
         ))}
