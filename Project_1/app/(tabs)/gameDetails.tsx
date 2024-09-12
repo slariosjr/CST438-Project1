@@ -5,21 +5,57 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useLocalSearchParams } from 'expo-router';
 import { useRoute } from '@react-navigation/native';
+import { useState } from 'react';
+import { useNavigation } from 'expo-router';
 
 
-
-export default function GameDetailsScreen({route, navigation}) {
+export default function GameDetailsScreen({route}) {
   //if gameId is undefined return an empty object
-  const {gameId} = useRoute().params ?? {}; 
+  const {gameId, cover, gameName, gameStoryline, gameSummary} = useRoute().params ?? {}; 
+  // track if game is saved or not
+  const [isSaved, setIsSaved] = useState(false); 
+  let navigation = useNavigation(); 
+
+  const saveGame = () => {
+    // toggle the saved state
+
+    Alert.alert(isSaved ? `Unadded Game with Game ID: ${gameId}` : `Game Saved! With Game ID:${gameId}`);
+    setIsSaved(!isSaved); 
+  };
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={<Ionicons size={310} name="game-controller" style={styles.headerImage} />}>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Game Details Page</ThemedText>
-        <Text>{gameId}</Text>
-        <Button title="Save Game" />
+
+    {/* back button */}
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('home')}>
+          <Ionicons name="arrow-back" size={24} color="black" />
+        </TouchableOpacity>
+
+        <ThemedText type="title" style={styles.headerTitle}>Game Details Page</ThemedText>
       </ThemedView>
+        {/* Game Details */}
+        <View>
+            {cover? (
+              <Image
+                source={{ uri: `https:${cover}` }}
+                style={styles.gameIcon}
+                resizeMode="cover"
+              />
+            ) : (
+              <Ionicons name="image" size={50} color="#808080" />
+            )}
+            <Text style={styles.gameTitle}>{gameName}</Text>
+            <Text>Game ID: {gameId}</Text>
+            <Text>Description: {gameSummary}</Text>
+            <Text>Storyline: {gameStoryline}</Text>
+          </View>
+          {/* Save Button */}
+        <Button 
+            title={isSaved ? 'Unadd Game' : 'Add Game'} 
+            onPress={saveGame}
+            color={isSaved ? 'red' : 'green'}/>
     </ParallaxScrollView>
   );
 }
@@ -31,16 +67,34 @@ const styles = StyleSheet.create({
     left: -35,
     position: 'absolute',
   },
+  headerTitle:{
+    right:-45,
+  },
+  backButton: {
+    position: 'absolute',
+    top: -18,
+    left: -26,
+    padding: 10,
+    backgroundColor: '#E0E0E0',
+    borderRadius: 30,
+    zIndex: 1,
+  },
   titleContainer: {
     flexDirection: 'row',
     gap: 8,
   },
   gameIcon: {
-    width: 50,
-    height: 50,
-    marginRight: 10,
+    width: 200,
+    height: 200,
+    alignSelf: 'center',
   },
   gameTitle: {
     fontSize: 18,
+    textAlign: 'center'
   },
+  gameItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+  }
 });
