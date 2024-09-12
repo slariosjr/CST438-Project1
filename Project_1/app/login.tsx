@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Text } from 'react-native';
+import { Alert } from 'react-native';
 
 const Login: React.FC = () => { 
   const [username, setUsername] = useState<string>('');
@@ -9,6 +10,11 @@ const Login: React.FC = () => {
   const handleLogin = (): void => {
 
     // login logic with the database
+    if (username === 'user' && password === 'pass') {
+      Alert.alert('Login Success!');
+    } else {
+      Alert.alert('Invalid credentials');
+    }
     console.log('Login attempt with:', username, password);
     // authenticate the user here
   };
