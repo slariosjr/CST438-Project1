@@ -7,7 +7,18 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigation } from 'expo-router';
 
 // API getGames Function 
-const getGames = async (limit, offset) => {
+type game= {
+  id: number,
+  cover: {
+    id: Number,
+    url: String
+  },
+  name: string
+}
+// Add data based on what you need.
+
+
+const getGames = async (limit: Number, offset: Number) => {
   const URL = "https://api.igdb.com/v4/games/";
 
   try {
@@ -47,7 +58,7 @@ export default function TabTwoScreen() {
     setLoading(true);
     // get 10 games at a time 
     const newGames = await getGames(10, offset); 
-    setGames(prevGames => [...prevGames, ...newGames]);
+    setGames(prevGames => [...prevGames, ...newGames] as never);
     // save previous games 
     setOffset(prevOffset => prevOffset + 10); 
     if (newGames.length < 10) {
@@ -70,10 +81,14 @@ export default function TabTwoScreen() {
   let navigation = useNavigation();
   
   // when game is clicked, bring user to a game details page with the game ID 
-  const onGameImageClick = (game) => {
+  const onGameImageClick = (game: game) => {
+    console.log(JSON.stringify(game));
     Alert.alert(`Game Selected`, `You clicked on ${game.name} with game ID: ${game.id}`);
     // navigate to game details page
-    navigation.navigate('gameDetails', {gameId: game.id});
+
+    // Type script is throwing a tantrum over this 
+    // @ts-ignore
+    navigation.navigate('gameDetails', {gameId:  game.id});
   };
 
   return (
@@ -86,7 +101,7 @@ export default function TabTwoScreen() {
       <ThemedText>Here a full list of video games will be displayed!</ThemedText>
       <ScrollView contentContainerStyle={styles.gameList}>
         {/* for each game make it a clickable item with the game cover and the name */}
-        {games.map((game) => (
+        {games.map((game: game) => (
           <TouchableOpacity key={game.id} onPress={() => onGameImageClick(game)}>
             <View style={styles.gameItem}>
               {game.cover?.url ? (
