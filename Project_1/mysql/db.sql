@@ -9,18 +9,20 @@ CREATE TABLE Game (
     title VARCHAR(255) NOT NULL,
     genre VARCHAR(100),
     releaseDate DATE
+    cover_url VARCHAR(255)
 );
 
 CREATE TABLE Library (
     libraryID INT PRIMARY KEY,
-    userID INT,
+    userID INT NOT NUll,
+    gameID INT NOT NULl
     FOREIGN KEY (userID) REFERENCES User(userID)
 );
 
 CREATE TABLE Comparison (
     comparisonID INT PRIMARY KEY,
-    userID1 INT,
-    userID2 INT,
+    userID1 INT NOT NULL,
+    userID2 INT NOT NULL,
     date DATE,
     FOREIGN KEY (userID1) REFERENCES User(userID),
     FOREIGN KEY (userID2) REFERENCES User(userID)
@@ -34,3 +36,9 @@ CREATE TABLE LibraryGame (
     FOREIGN KEY (libraryID) REFERENCES Library(libraryID),
     FOREIGN KEY (gameID) REFERENCES Game(gameID)
 );
+
+
+CREATE INDEX idx_user_email ON User(email);
+CREATE INDEX idx_game_title ON Game(title);
+CREATE INDEX idx_library_user ON Library(userID);
+CREATE INDEX idx_library_game ON Library(gameID);

@@ -7,7 +7,22 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigation } from 'expo-router';
 
 // API getGames Function 
+<<<<<<< HEAD
 const getGames = async (limit, offset, search = '') => {
+=======
+type game= {
+  id: number,
+  cover: {
+    id: Number,
+    url: String
+  },
+  name: string
+}
+// Add data based on what you need.
+
+
+const getGames = async (limit: Number, offset: Number) => {
+>>>>>>> d1a5f0a4908e8ced51a85ec37ae7545dd2ff735b
   const URL = "https://api.igdb.com/v4/games/";
 
   try {
@@ -50,8 +65,13 @@ export default function TabTwoScreen() {
     if (loading || !hasMore) return;
     setLoading(true);
     // get 10 games at a time 
+<<<<<<< HEAD
     const newGames = await getGames(10, offset, newSearch); 
     setGames(prevGames => [...prevGames, ...newGames]);
+=======
+    const newGames = await getGames(10, offset); 
+    setGames(prevGames => [...prevGames, ...newGames] as never);
+>>>>>>> d1a5f0a4908e8ced51a85ec37ae7545dd2ff735b
     // save previous games 
     setOffset(prevOffset => prevOffset + 10); 
     if (newGames.length < 10) {
@@ -82,11 +102,22 @@ export default function TabTwoScreen() {
   let navigation = useNavigation();
   
   // when game is clicked, bring user to a game details page with the game ID 
+<<<<<<< HEAD
   const onGameImageClick = (game) => {
      // check if the game has a cover and if the cover has a URL
     const coverUrl = game.cover && game.cover.url ? game.cover.url : 'https://static.thenounproject.com/png/11204-200.png';
     // navigate to game details page with parameters
     navigation.navigate('gameDetails', {gameId: game.id, cover: coverUrl, gameName: game.name, gameStoryline: game.storyline, gameSummary: game.summary });
+=======
+  const onGameImageClick = (game: game) => {
+    console.log(JSON.stringify(game));
+    Alert.alert(`Game Selected`, `You clicked on ${game.name} with game ID: ${game.id}`);
+    // navigate to game details page
+
+    // Type script is throwing a tantrum over this 
+    // @ts-ignore
+    navigation.navigate('gameDetails', {gameId:  game.id});
+>>>>>>> d1a5f0a4908e8ced51a85ec37ae7545dd2ff735b
   };
 
   return (
@@ -113,7 +144,7 @@ export default function TabTwoScreen() {
       <ThemedText>Here a full list of video games will be displayed!</ThemedText>
       <ScrollView contentContainerStyle={styles.gameList}>
         {/* for each game make it a clickable item with the game cover and the name */}
-        {games.map((game) => (
+        {games.map((game: game) => (
           <TouchableOpacity key={game.id} onPress={() => onGameImageClick(game)}>
             <View style={styles.gameItem}>
               {game.cover?.url ? (
@@ -129,7 +160,7 @@ export default function TabTwoScreen() {
                   resizeMode="cover"
                 />
               )}
-              <Text style={styles.gameTitle}>{game.name}</Text>
+              <ThemedText style={styles.gameTitle}>{game.name}</ThemedText>
             </View>
           </TouchableOpacity>
         ))}
