@@ -1,25 +1,26 @@
 
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Text } from 'react-native';
-import { Alert } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Text, Alert } from 'react-native';
+import { useRouter } from 'expo-router';  // Use useRouter for navigation
 
-const Login: React.FC = () => { 
+const Login: React.FC = () => {
+  const router = useRouter();  // useRouter to handle navigation
+
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
   const handleLogin = (): void => {
-
     // login logic with the database
     if (username === 'user' && password === 'pass') {
       Alert.alert('Login Success!');
+      router.push('/explore');  // Navigate to explore screen
     } else {
       Alert.alert('Invalid credentials');
     }
-    console.log('Login attempt with:', username, password);
-    // authenticate the user here
   };
-  const createAccount =() =>{
-        console.log('Create account');
+
+  const createAccount = () => {
+    router.push('/createAccount');  // Navigate to Create Account screen
   };
 
   return (
@@ -29,7 +30,7 @@ const Login: React.FC = () => {
         style={styles.input}
         placeholder="Username"
         value={username}
-        onChangeText={setUsername} 
+        onChangeText={setUsername}
         autoCapitalize="none"
       />
       <TextInput
@@ -37,17 +38,16 @@ const Login: React.FC = () => {
         placeholder="Password"
         secureTextEntry
         value={password}
-        onChangeText={setPassword} 
+        onChangeText={setPassword}
       />
       <Button
-        title="Log In"
+        title="Login"
         onPress={handleLogin}
       />
-      
       <Button
         title="Create Account"
         onPress={createAccount}
-        />
+      />
     </View>
   );
 };
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: 'white',
     borderRadius: 5,
-    marginTop: 20
+    marginTop: 20,
   },
   input: {
     height: 40,
