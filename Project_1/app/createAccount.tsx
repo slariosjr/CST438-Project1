@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '@/app/App'; // Corrected import
+import { useRouter } from 'expo-router';  // Use useRouter instead of navigation
 
-// Define navigation prop type for the CreateAccount screen
-type SignupScreenNavigationProp = StackNavigationProp<RootStackParamList, 'CreateAccount'>;
+export default function SignupScreen() {
+  const router = useRouter();  // Using useRouter to navigate
 
-type Props = {
-  navigation: SignupScreenNavigationProp;
-};
-
-export default function SignupScreen({ navigation }: Props) {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
@@ -20,9 +14,9 @@ export default function SignupScreen({ navigation }: Props) {
       Alert.alert('Passwords do not match');
       return;
     }
-    // Add account creation logic here
+  
     Alert.alert('Account created successfully!');
-    navigation.navigate('Login');
+    router.push('/login');  // Navigate back to Login screen using router.push
   };
 
   return (
