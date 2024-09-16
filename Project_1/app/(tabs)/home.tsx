@@ -36,7 +36,7 @@ export default function TabTwoScreen() {
     if (loading || !hasMore) return;
     setLoading(true);
     // get 10 games at a time 
-    const newGames = await getGames(10, offset); 
+    const newGames = await getGames(10, offset, search); 
     setGames(prevGames => [...prevGames, ...newGames] as never);
     // save previous games 
     setOffset(prevOffset => prevOffset + 10); 
@@ -48,7 +48,7 @@ export default function TabTwoScreen() {
   }, [loading, hasMore, offset]);
 
 
-  const getGames = async (limit: Number, offset: Number) => {
+  const getGames = async (limit: Number, offset: Number, toSearch: string) => {
     const URL = "https://api.igdb.com/v4/games/";
   
     try {
@@ -60,7 +60,7 @@ export default function TabTwoScreen() {
           'Authorization': 'Bearer rc2i6kl8y3gtscgcru9dgfyzrf7z2z',
         },
         body: `fields name, cover.url, summary, storyline;
-            where cover.url != null & summary != null & storyline != null & name ~*"${search}"*;  
+            where cover.url != null & summary != null & storyline != null & name ~*"${toSearch}"*;  
             limit ${limit}; offset ${offset};`
       });
   
