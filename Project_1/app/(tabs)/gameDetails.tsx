@@ -7,11 +7,18 @@ import { useLocalSearchParams } from 'expo-router';
 import { useRoute } from '@react-navigation/native';
 import { useState } from 'react';
 import { useNavigation } from 'expo-router';
+import { getGamesById } from '@/lib/apiCalls';
 
 
 export default function GameDetailsScreen({route}) {
   //if gameId is undefined return an empty object
+
+  // Typescript throws a tantrum over this.. 
+  // @ts-ignore
   const {gameId, cover, gameName, gameStoryline, gameSummary} = useRoute().params ?? {}; 
+
+  console.log(getGamesById(gameId));
+  console.log(gameId, cover, gameName, gameStoryline, gameSummary);
   // track if game is saved or not
   const [isSaved, setIsSaved] = useState(false); 
   let navigation = useNavigation(); 

@@ -6,18 +6,8 @@ import { ThemedView } from '@/components/ThemedView';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigation } from 'expo-router';
 
-// API getGames Function 
-type game= {
-  id: number,
-  cover: {
-    id: Number,
-    url: String
-  },
-  name: string
-}
-// Add data based on what you need
-
-
+// Just abstracting out code.. 
+import { getGames, onGameImageClick, gameInfo} from '@/lib/apiCalls';
 
 export default function TabTwoScreen() {
   // store the fetched games
@@ -46,32 +36,6 @@ export default function TabTwoScreen() {
     }
     setLoading(false);
   }, [loading, hasMore, offset]);
-
-
-  const getGames = async (limit: Number, offset: Number, toSearch: string) => {
-    const URL = "https://api.igdb.com/v4/games/";
-  
-    try {
-      const response = await fetch(URL, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Client-ID': 'ydvyzcbct3xmsd2z1yqvygldviukst',
-          'Authorization': 'Bearer rc2i6kl8y3gtscgcru9dgfyzrf7z2z',
-        },
-        body: `fields name, cover.url, summary, storyline;
-            where cover.url != null & summary != null & storyline != null & name ~*"${toSearch}"*;  
-            limit ${limit}; offset ${offset};`
-      });
-  
-      const data = await response.json();
-      // console.log(data); 
-      return data;
-    } catch (error) {
-      console.error('Error fetching games:', error);
-      return []; 
-    }
-  };
   
   // fetch that immediately puts 10 games on the screen of the home page
   useEffect(() => {
@@ -92,17 +56,6 @@ export default function TabTwoScreen() {
 
   //navigation for going to a different screen 
   let navigation = useNavigation();
-  
-  // when game is clicked, bring user to a game details page with the game ID 
-  const onGameImageClick = (game: game) => {
-    console.log(JSON.stringify(game));
-    Alert.alert(`Game Selected`, `You clicked on ${game.name} with game ID: ${game.id}`);
-    // navigate to game details page
-
-    // Type script is throwing a tantrum over this 
-    // @ts-ignore
-    navigation.navigate('gameDetails', {gameId:  game.id});
-  };
 
   return (
     <ParallaxScrollView
@@ -128,8 +81,8 @@ export default function TabTwoScreen() {
       <ThemedText>Here a full list of video games will be displayed!</ThemedText>
       <ScrollView contentContainerStyle={styles.gameList}>
         {/* for each game make it a clickable item with the game cover and the name */}
-        {games.map((game: game) => (
-          <TouchableOpacity key={game.id} onPress={() => onGameImageClick(game)}>
+        {games.map((game: gameInfo) => (
+          <TouchableOpacity key={game.id} onPress={() => onGameImageClick(game, navigation)}>
             <View style={styles.gameItem}>
               {game.cover?.url ? (
                 <Image
