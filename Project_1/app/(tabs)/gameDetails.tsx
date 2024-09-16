@@ -46,10 +46,10 @@ export default function GameDetailsScreen({route}) {
             ) : (
               <Ionicons name="image" size={50} color="#808080" />
             )}
-            <Text style={styles.gameTitle}>{gameName}</Text>
-            <Text style={styles.gameInfo}>Game ID: {gameId}</Text>
-            <Text style={styles.gameInfo}>Description: {gameSummary}</Text>
-            <Text style={styles.gameInfo}>Storyline: {gameStoryline}</Text>
+            <ThemedText style={styles.gameTitle}>{gameName}</ThemedText>
+            <ThemedText style={styles.gameInfo}>Game ID: {gameId}</ThemedText>
+            <ThemedText style={styles.gameInfo}>Description: {gameSummary}</ThemedText>
+            <ThemedText style={styles.gameInfo}>Storyline: {gameStoryline}</ThemedText>
           </View>
           {/* Save Button */}
         <Button 
