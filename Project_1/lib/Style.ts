@@ -20,5 +20,9 @@ export const styles = StyleSheet.create({
   },
   buttonDark: {
     color: '#6047ff',
+  },
+  bundleHi : {
+    width: 64,
+    height: 64,
   }
 });
