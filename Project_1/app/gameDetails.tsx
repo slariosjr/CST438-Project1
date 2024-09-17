@@ -7,23 +7,24 @@ import { useLocalSearchParams } from 'expo-router';
 import { ParamListBase, RouteProp, useRoute } from '@react-navigation/native';
 import { useState } from 'react';
 import { useNavigation } from 'expo-router';
-
+import GameDetailsComp from '@/components/gameDetailComp'
 
 export default function GameDetailsScreen(route: RouteProp<ParamListBase>) {
   //if gameId is undefined return an empty object
 
   // Typescript throws a tantrum! 
   // @ts-ignore
-  const {gameId, cover, gameName, gameStoryline, gameSummary} = useRoute().params ?? {}; 
+  const { gameId, cover, gameName, gameStoryline, gameSummary } = useRoute().params ?? {};
+  let compData: any = [gameId, cover, gameName, gameStoryline, gameSummary];
   // track if game is saved or not
-  const [isSaved, setIsSaved] = useState(false); 
-  let navigation = useNavigation(); 
+  const [isSaved, setIsSaved] = useState(false);
+  let navigation = useNavigation();
 
   const saveGame = () => {
     // toggle the saved state
 
     Alert.alert(isSaved ? `Unadded Game with Game ID: ${gameId}` : `Game Saved! With Game ID:${gameId}`);
-    setIsSaved(!isSaved); 
+    setIsSaved(!isSaved);
   };
   return (
     <ParallaxScrollView
@@ -31,35 +32,21 @@ export default function GameDetailsScreen(route: RouteProp<ParamListBase>) {
       headerImage={<Ionicons size={310} name="game-controller" style={styles.headerImage} />}>
       <ThemedView style={styles.titleContainer}>
 
-    {/* back button: ts-ignore because typescript throws a fit, Maybe pepper spray the typescript! (‾◡‾) */}
-      {/*@ts-ignore*/}
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('home')}>
+        {/* back button: ts-ignore because typescript throws a fit, Maybe pepper spray the typescript! (‾◡‾) */}
+        {/*@ts-ignore*/}
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('home')}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
 
         <ThemedText type="title" style={styles.headerTitle}>Game Details Page</ThemedText>
       </ThemedView>
-        {/* Game Details */}
-        <ThemedText>
-            {cover? (
-              <Image
-                source={{ uri: `https:${cover}` }}
-                style={styles.gameIcon}
-                resizeMode="cover"
-              />
-            ) : (
-              <Ionicons name="image" size={50} color="#808080" />
-            )}
-            <ThemedText>{gameName}</ThemedText>
-            <ThemedText>Game ID: {gameId}</ThemedText>
-            <ThemedText>Description: {gameSummary}</ThemedText>
-            <ThemedText>Storyline: {gameStoryline}</ThemedText>
-          </ThemedText>
-          {/* Save Button */}
-        <Button 
-            title={isSaved ? 'Unadd Game' : 'Add Game'} 
-            onPress={saveGame}
-            color={isSaved ? 'red' : 'green'}/>
+      {/* Game Details */}
+      <GameDetailsComp gameData={compData}/>
+      {/* Save Button */}
+      <Button
+        title={isSaved ? 'Unadd Game' : 'Add Game'}
+        onPress={saveGame}
+        color={isSaved ? 'red' : 'green'} />
     </ParallaxScrollView>
   );
 }
@@ -71,8 +58,8 @@ const styles = StyleSheet.create({
     left: -35,
     position: 'absolute',
   },
-  headerTitle:{
-    right:-45,
+  headerTitle: {
+    right: -45,
     top: -8,
   },
   backButton: {
@@ -87,26 +74,5 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     gap: 8,
-  },
-  gameIcon: {
-    width: 200,
-    height: 200,
-    alignSelf: 'center',
-    borderRadius: 8,
-  },
-  gameInfo:{
-    fontSize: 12,
-    textAlign: 'left',
-    color: '#FFFFFF',
-  },
-  gameTitle: {
-    fontSize: 18,
-    textAlign: 'center',
-    color: '#FFFFFF',
-  },
-  gameItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
   }
 });
