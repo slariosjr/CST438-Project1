@@ -26,15 +26,16 @@ export default function HomeScreen() {
 
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+      headerBackgroundColor={{ light: '#8100cc', dark: '#550087' }}
       headerImage={
         <Image
-          source={require('@/assets/images/partial-react-logo.png')}
+          source={require('@/assets/images/BundleLogox512x256.png')}
           style={styles.reactLogo}
         />
       }>
+      <ThemedText type="title">Welcome to Bun-dle!</ThemedText>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
+        
         <HelloWave />
       </ThemedView>
 
@@ -67,9 +68,7 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   titleContainer: {
-    flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
   },
   inputContainer: {
     paddingHorizontal: 20,
@@ -84,10 +83,11 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+    height: 160,
+    width: 350,
+    alignSelf: 'center', // This will center the logo horizontally // Ensure the logo takes up available space within the header
+    alignItems: 'center',
     position: 'absolute',
+    bottom: 0
   },
 });
