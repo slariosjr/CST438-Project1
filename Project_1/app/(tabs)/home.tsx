@@ -51,7 +51,7 @@ export default function TabTwoScreen() {
     setGames([]);
     setOffset(0);
     setHasMore(true);
-    fetchGames(search);
+    fetchGames(search.toLowerCase());
   }
 
   //navigation for going to a different screen 

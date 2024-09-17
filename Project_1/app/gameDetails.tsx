@@ -30,16 +30,6 @@ export default function GameDetailsScreen(route: RouteProp<ParamListBase>) {
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={<Ionicons size={310} name="game-controller" style={styles.headerImage} />}>
-      <ThemedView style={styles.titleContainer}>
-
-        {/* back button: ts-ignore because typescript throws a fit, Maybe pepper spray the typescript! (‾◡‾) */}
-        {/*@ts-ignore*/}
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('home')}>
-          <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-
-        <ThemedText type="title" style={styles.headerTitle}>Game Details Page</ThemedText>
-      </ThemedView>
       {/* Game Details */}
       <GameDetailsComp gameData={compData}/>
       {/* Save Button */}
