@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Image, StyleSheet, Button, TextInput, Alert } from 'react-native';
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useRouter } from 'expo-router';  
+import createDatabase from '@/lib/database';
 
 export default function HomeScreen() {
   const router = useRouter();  
@@ -12,6 +13,16 @@ export default function HomeScreen() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  const createDB = async() => {
+    await createDatabase();
+  }
+
+  // createDB();
+
+  useEffect(() => {
+    createDB();
+  }, []); 
+  // useEFFECT! 
   const handleLogin = () => {
     if (username === '' || password === '') {
       Alert.alert('Please enter both username and password.');
@@ -23,6 +34,7 @@ export default function HomeScreen() {
     //@ts-ignore
     router.push('/explore');  // Navigate to explore screen after successful login
   };
+
 
   return (
     <ParallaxScrollView
