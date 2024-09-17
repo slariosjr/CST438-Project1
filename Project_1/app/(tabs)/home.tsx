@@ -22,7 +22,7 @@ export default function TabTwoScreen() {
   const [search, setSearch] = useState('');
 
   // Function: fetch games and update state
-  const fetchGames = useCallback(async (newSearch = '') => {
+  const fetchGames = useCallback(async (search = '') => {
     if (loading || !hasMore) return;
     setLoading(true);
     // get 10 games at a time 
