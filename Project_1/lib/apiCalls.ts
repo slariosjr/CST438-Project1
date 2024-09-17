@@ -3,7 +3,6 @@ import { Alert } from "react-native";
 
 // Gets games from the database, 
 
-
 export type gameInfo = {
     id: number,
     cover: {
@@ -51,7 +50,6 @@ export const onGameImageClick = (game: gameInfo,
 
     // navigate to game details page with parameters
     const coverUrl = game.cover && game.cover.url ? game.cover.url : 'https://static.thenounproject.com/png/11204-200.png';
-
 
     // Type script is throwing a tantrum over this 
     // @ts-ignore
