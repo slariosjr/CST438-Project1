@@ -4,13 +4,16 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useLocalSearchParams } from 'expo-router';
-import { useRoute } from '@react-navigation/native';
+import { ParamListBase, RouteProp, useRoute } from '@react-navigation/native';
 import { useState } from 'react';
 import { useNavigation } from 'expo-router';
 
 
-export default function GameDetailsScreen({route}) {
+export default function GameDetailsScreen(route: RouteProp<ParamListBase>) {
   //if gameId is undefined return an empty object
+
+  // Typescript throws a tantrum! 
+  // @ts-ignore
   const {gameId, cover, gameName, gameStoryline, gameSummary} = useRoute().params ?? {}; 
   // track if game is saved or not
   const [isSaved, setIsSaved] = useState(false); 
@@ -28,7 +31,8 @@ export default function GameDetailsScreen({route}) {
       headerImage={<Ionicons size={310} name="game-controller" style={styles.headerImage} />}>
       <ThemedView style={styles.titleContainer}>
 
-    {/* back button */}
+    {/* back button: ts-ignore because typescript throws a fit, Maybe pepper spray the typescript! (‾◡‾) */}
+      {/*@ts-ignore*/}
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('home')}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
@@ -36,7 +40,7 @@ export default function GameDetailsScreen({route}) {
         <ThemedText type="title" style={styles.headerTitle}>Game Details Page</ThemedText>
       </ThemedView>
         {/* Game Details */}
-        <View>
+        <ThemedText>
             {cover? (
               <Image
                 source={{ uri: `https:${cover}` }}
@@ -46,11 +50,11 @@ export default function GameDetailsScreen({route}) {
             ) : (
               <Ionicons name="image" size={50} color="#808080" />
             )}
-            <Text style={styles.gameTitle}>{gameName}</Text>
-            <Text style={styles.gameInfo}>Game ID: {gameId}</Text>
-            <Text style={styles.gameInfo}>Description: {gameSummary}</Text>
-            <Text style={styles.gameInfo}>Storyline: {gameStoryline}</Text>
-          </View>
+            <ThemedText>{gameName}</ThemedText>
+            <ThemedText>Game ID: {gameId}</ThemedText>
+            <ThemedText>Description: {gameSummary}</ThemedText>
+            <ThemedText>Storyline: {gameStoryline}</ThemedText>
+          </ThemedText>
           {/* Save Button */}
         <Button 
             title={isSaved ? 'Unadd Game' : 'Add Game'} 

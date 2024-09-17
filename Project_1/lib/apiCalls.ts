@@ -49,15 +49,20 @@ export const onGameImageClick = (game: gameInfo,
     Alert.alert(`Game Selected`, `You clicked on ${game.name} with game ID: ${game.id}`);
     // navigate to game details page
 
+    // navigate to game details page with parameters
+    const coverUrl = game.cover && game.cover.url ? game.cover.url : 'https://static.thenounproject.com/png/11204-200.png';
+
+
     // Type script is throwing a tantrum over this 
     // @ts-ignore
-    nav.navigate('gameDetails', { gameId: game.id });
+    nav.navigate('gameDetails', { gameId: game.id, cover: coverUrl, gameName: game.name, gameStoryline: game.storyline, gameSummary: game.summary });
 };
 
 // TODO: UNIT TEST THIS 
 // Get the game by ID
 export const getGamesById = async (id: Number) => {
     const URL = "https://api.igdb.com/v4/games/";
+    console.log(id);
 
     try {
         const response = await fetch(URL, {
@@ -67,7 +72,8 @@ export const getGamesById = async (id: Number) => {
                 'Client-ID': 'ydvyzcbct3xmsd2z1yqvygldviukst',
                 'Authorization': 'Bearer rc2i6kl8y3gtscgcru9dgfyzrf7z2z',
             },
-            body: `fields name, cover.url, summary, storyline; where id = ${id};`,
+            body: `fields name, cover.url, summary, storyline;
+            where id = ${id};`,
         });
 
         if (!response.ok) {
@@ -75,6 +81,7 @@ export const getGamesById = async (id: Number) => {
         }
 
         const data = await response.json();
+
         return data;
     } catch (error) {
         console.error('Error fetching game:', error);

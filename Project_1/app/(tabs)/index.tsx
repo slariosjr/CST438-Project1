@@ -19,6 +19,8 @@ export default function HomeScreen() {
     }
     
     Alert.alert(`Logged in with username: ${username}`);
+
+    //@ts-ignore
     router.push('/explore');  // Navigate to explore screen after successful login
   };
 
