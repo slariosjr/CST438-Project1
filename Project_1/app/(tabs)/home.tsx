@@ -59,7 +59,7 @@ export default function TabTwoScreen() {
 
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
+      headerBackgroundColor={{ light: '#8100cc', dark: '#550087' }}
       headerImage={<Ionicons size={310} name="game-controller" style={styles.headerImage} />}>
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">All Games</ThemedText>
@@ -112,7 +112,7 @@ export default function TabTwoScreen() {
 
 const styles = StyleSheet.create({
   headerImage: {
-    color: '#808080',
+    color: '#30004d',
     bottom: -90,
     left: -35,
     position: 'absolute',
