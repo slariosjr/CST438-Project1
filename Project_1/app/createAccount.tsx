@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';  // Use useRouter instead of navigation
+import { createDatabase, printAllTables, addUser, user} from '@/lib/database';
+import { openDatabaseAsync, SQLiteDatabase } from 'expo-sqlite';
+
+let db: SQLiteDatabase; 
 
 export default function SignupScreen() {
   const router = useRouter();  // Using useRouter to navigate
@@ -9,12 +13,26 @@ export default function SignupScreen() {
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
 
+  const createDB = async () => {
+    await createDatabase();
+    db = await openDatabaseAsync('app.db');
+    await printAllTables(db);
+  }
+
+  useEffect(() => {
+    createDB();
+    
+  }, []);
   const handleSignup = () => {
     if (password !== confirmPassword) {
       Alert.alert('Passwords do not match');
       return;
     }
-  
+    let newUser: user = {
+      username: username,
+      password: password,
+    }
+    addUser(db, newUser)
     Alert.alert('Account created successfully!');
     router.push('/login');  // Navigate back to Login screen using router.push
   };
