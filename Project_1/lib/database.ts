@@ -173,11 +173,14 @@ export const resetDB = async (db: SQLite.SQLiteDatabase) => {
 export const printAllTables = async (db: SQLite.SQLiteDatabase) => {
     try {
         console.log("Games Saved to DB: \n");
-        console.log(await db.getAllAsync(queryAllGames));
+        const gameTable = await db.getAllAsync(queryAllGames)
+        console.log(gameTable);
         console.log("Users Saved to DB: \n");
-        console.log(await db.getAllAsync(queryAllUserInfo));
+        const userInfoTable = await db.getAllAsync(queryAllUserInfo);
+        console.log(userInfoTable);
         console.log("GamesToUsers Saved to DB: \n");
-        console.log(await db.getAllAsync(queryAllUserToGame));
+        const userToGamesTable = await db.getAllAsync(queryAllUserToGame);
+        console.log(userToGamesTable)
     } catch (error) {
         console.error(`Error: ${error}`)
         throw error;
