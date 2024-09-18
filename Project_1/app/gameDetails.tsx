@@ -1,13 +1,15 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { StyleSheet, Image, Platform, Button, Alert, TouchableOpacity, View, ScrollView, Text } from 'react-native';
+import { StyleSheet, Button, Alert} from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { useLocalSearchParams } from 'expo-router';
 import { ParamListBase, RouteProp, useRoute } from '@react-navigation/native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigation } from 'expo-router';
 import GameDetailsComp from '@/components/gameDetailComp'
+import React from 'react';
+import { createDatabase, printAllTables } from '@/lib/database';
+import { openDatabaseAsync } from 'expo-sqlite';
+
+let db;
 
 export default function GameDetailsScreen(route: RouteProp<ParamListBase>) {
   //if gameId is undefined return an empty object
@@ -20,9 +22,20 @@ export default function GameDetailsScreen(route: RouteProp<ParamListBase>) {
   const [isSaved, setIsSaved] = useState(false);
   let navigation = useNavigation();
 
+  const createDB = async () => {
+    await createDatabase();
+    db = await openDatabaseAsync('app.db');
+    await printAllTables(db);
+  }
+
+  useEffect(() => {
+    createDB();
+    
+  }, []);
+  
   const saveGame = () => {
     // toggle the saved state
-
+    
     Alert.alert(isSaved ? `Unadded Game with Game ID: ${gameId}` : `Game Saved! With Game ID:${gameId}`);
     setIsSaved(!isSaved);
   };

@@ -1,9 +1,7 @@
 import * as SQLite from 'expo-sqlite';
-import { sha256 } from 'react-native-sha256';
 
 export type user = {
     username: string,
-    email: string,
     password: string,
 }
 
@@ -11,8 +9,9 @@ const dbIntializeSQLInstructions = `
     CREATE TABLE IF NOT EXISTS userInfo (
         userID INTEGER PRIMARY KEY AUTOINCREMENT,
         username VARCHAR(256) NOT NULL,
-        email VARCHAR(256) NOT NULL,
-        passwordHash VARCHAR(512) NOT NULL
+        password VARCHAR(256) NOT NULL,
+        email VARCHAR(256),
+        key VARCHAR(256)
     );
 
     CREATE TABLE IF NOT EXISTS game (
@@ -32,7 +31,7 @@ const dropSQLInstruction: string = `
     DROP TABLE IF EXISTS userToGame;`;
 
 const addUserSQLInstruction: string = `
-    INSERT INTO userInfo (username, email, passwordHash) VALUES (?, ?, ?)`;
+    INSERT INTO userInfo (username, password) VALUES (?, ?)`;
 
 const addGameSQLInstruction: string = `
     INSERT INTO game (gameID) VALUES (?)`;
@@ -40,14 +39,17 @@ const addGameSQLInstruction: string = `
 const addGameToUserInstruction: string = `
     INSERT INTO userToGame (userID, gameID, DATE) VALUES (?, ?, ?)`;
 
-const queryUserFromUsernameSQLInstruction: string = `
+const queryUserFromPasswordSQLInstruction: string = `
+    SELECT * FROM userInfo WHERE password = ?;`;
+
+const queryUserFromUserSQLInstruction: string = `
     SELECT * FROM userInfo WHERE username = ?;`;
 
-const queryUserFromPasswordSQLInstruction: string = `
-    SELECT * FROM userInfo WHERE passwordHash = ?;`;
+const queryUserFromLoginSQLInstruction: string = `
+    SELECT * FROM userInfo WHERE username = ? AND password = ?;`;
 
 const queryUserFromEmailSQLInstruction: string = `
-    SELECT * FROM userInfo WHERE passwordHash = ?;`;
+    SELECT * FROM userInfo WHERE email = ?;`;
 
 const queryGameForUserSQLInstruction: string = `
     SELECT g.* FROM userToGame ug
@@ -64,8 +66,16 @@ const removeGameFromUserSQLInstruction: string = `
     DELETE FROM userToGame WHERE userID = ? AND gameID = ?;`;
 
 const checkIfUserExists: string = `
-    SELECT COUNT(*) FROM userInfo WHERE passwordHash = ?`;
+    SELECT COUNT(*) FROM userInfo WHERE password = ?`;
 
+const queryAllGames: string = `
+    SELECT * FROM game;`;
+
+const queryAllUserInfo: string = `
+    SELECT * FROM userInfo`;
+
+const queryAllUserToGame: string = `
+    SELECT * FROM userToGame`;
 
 // Create the beeeee minecraft beeee!~
 export const createDatabase = async (): Promise<void> => {
@@ -92,12 +102,21 @@ const executeSQL = async (db: SQLite.SQLiteDatabase, sqlInstruction: string): Pr
     }
 }
 
-export const addUser = async (db: SQLite.SQLiteDatabase, userData: user) => {
-    const passhash: string = await sha256(userData.password);
+export const addUser = async (db: SQLite.SQLiteDatabase, userData: user): Promise<boolean> => {
     try {
-        await db.runAsync(addUserSQLInstruction, [userData.username, userData.email, passhash]);
+        // Okay Check if username exists 
+        const ifUserNameExists = await db.getFirstAsync(queryGameForUserSQLInstruction, [userData.username]);
+        if (ifUserNameExists) return false;
+        // Check if email exists
+        // const ifEmailAlreadyExists = await db.getFirstAsync(queryUserFromEmailSQLInstruction, [userData.email]);
+        // if (ifEmailAlreadyExists) return false;
+
+
+        // Then finally insert
+        await db.runAsync(addUserSQLInstruction, [userData.username, userData.password]);
+        return true;
     } catch (error) {
-        console.error(`Error: ${error}`)
+        console.error(`Error in add user: ${error}`)
         throw error;
     }
 }
@@ -111,9 +130,28 @@ export const addGame = async (db: SQLite.SQLiteDatabase, gameID: number) => {
     }
 }
 
-export const removeUser = async (db: SQLite.SQLiteDatabase, username: string) => {
+export const addGameToUser = async (db: SQLite.SQLiteDatabase, gameID: number, userID: number) => {
+    // Get date
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().slice(0, 10);
     try {
+        await db.runAsync(addGameToUserInstruction, [userID, gameID, formattedDate]);
+    } catch (error) {
+        console.error(`Error: ${error}`)
+        throw error;
+    }
+}
 
+export const removeUser = async (db: SQLite.SQLiteDatabase, password: string): Promise<boolean> => {
+    try {
+        // Check if account exists
+        const user = await db.getFirstAsync(queryUserFromPasswordSQLInstruction, [password]);
+        if (!user) return false;  // User not found
+
+        // User found, remove using userID
+        // @ts-ignore
+        await db.runAsync(removeUserSQLInstruction, [user.username]);
+        return true;
     } catch (error) {
         console.error(`Error: ${error}`)
         throw error;
@@ -129,5 +167,37 @@ export const resetDB = async (db: SQLite.SQLiteDatabase) => {
     if (!await executeSQL(db, dbIntializeSQLInstructions)) {
         console.error("Error: Could recreate tables!");
         return;
+    }
+}
+
+export const printAllTables = async (db: SQLite.SQLiteDatabase) => {
+    try {
+        console.log("Games Saved to DB: \n");
+        console.log(await db.getAllAsync(queryAllGames));
+        console.log("Users Saved to DB: \n");
+        console.log(await db.getAllAsync(queryAllUserInfo));
+        console.log("GamesToUsers Saved to DB: \n");
+        console.log(await db.getAllAsync(queryAllUserToGame));
+    } catch (error) {
+        console.error(`Error: ${error}`)
+        throw error;
+    }
+
+}
+
+export const loginCheck = async (db: SQLite.SQLiteDatabase, username: string, password: string):Promise<Number> => {
+    try {
+        console.log(username);
+        console.log(password);
+        console.log(queryUserFromLoginSQLInstruction);
+        const user = await db.getFirstAsync(queryUserFromLoginSQLInstruction, [username, password]);
+        console.log(user);
+        if (!user) return -1;  // User not found
+
+        //@ts-ignore Again Typescript tantrum!
+        return user.userID;
+    } catch (error) {
+        console.error(`Error: ${error}`)
+        throw error;
     }
 }
