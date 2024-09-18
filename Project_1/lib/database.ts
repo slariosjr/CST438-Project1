@@ -1,6 +1,5 @@
 import * as SQLite from 'expo-sqlite';
 
-
 // Create the beeeee minecraft beeee!~
 const createDatabase = async (): Promise<void> => {
     const db: SQLite.SQLiteDatabase = await SQLite.openDatabaseAsync('app.db');
@@ -30,7 +29,10 @@ const createDatabase = async (): Promise<void> => {
         dateAdded date,
         rating int, 
     );`;
-
+    try {
     await db.execAsync(dbSQLInstructions);
+    } catch (error) {
+        console.error(`Error: ${error}`)
+    }
 }
 export default createDatabase; 
