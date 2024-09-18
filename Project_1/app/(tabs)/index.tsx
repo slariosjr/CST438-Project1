@@ -4,31 +4,29 @@ import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { useRouter } from 'expo-router';  
-import createDatabase from '@/lib/database';
+import { useRouter } from 'expo-router';
+import { createDatabase } from '@/lib/database';
 
 export default function HomeScreen() {
-  const router = useRouter();  
+  const router = useRouter();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const createDB = async() => {
+  const createDB = async () => {
     await createDatabase();
   }
 
-  // createDB();
-
   useEffect(() => {
     createDB();
-  }, []); 
-  // useEFFECT! 
+  }, []);
+  
   const handleLogin = () => {
     if (username === '' || password === '') {
       Alert.alert('Please enter both username and password.');
       return;
     }
-    
+
     Alert.alert(`Logged in with username: ${username}`);
 
     //@ts-ignore
@@ -47,7 +45,7 @@ export default function HomeScreen() {
       }>
       <ThemedText type="title">Welcome to Bun-dle!</ThemedText>
       <ThemedView style={styles.titleContainer}>
-        
+
         <HelloWave />
       </ThemedView>
 
