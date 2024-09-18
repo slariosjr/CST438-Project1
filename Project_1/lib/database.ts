@@ -43,6 +43,12 @@ const addGameToUserInstruction: string = `
 const queryUserFromUsernameSQLInstruction: string = `
     SELECT * FROM userInfo WHERE username = ?;`;
 
+const queryUserFromPasswordSQLInstruction: string = `
+    SELECT * FROM userInfo WHERE passwordHash = ?;`;
+
+const queryUserFromEmailSQLInstruction: string = `
+    SELECT * FROM userInfo WHERE passwordHash = ?;`;
+
 const queryGameForUserSQLInstruction: string = `
     SELECT g.* FROM userToGame ug
     INNER JOIN game g ON ug.gameID = g.gameID
@@ -57,6 +63,8 @@ const removeUserSQLInstruction: string = `
 const removeGameFromUserSQLInstruction: string = `
     DELETE FROM userToGame WHERE userID = ? AND gameID = ?;`;
 
+const checkIfUserExists: string = `
+    SELECT COUNT(*) FROM userInfo WHERE passwordHash = ?`;
 
 
 // Create the beeeee minecraft beeee!~
