@@ -24,7 +24,7 @@ export const getGames = async (limit: Number, offset: Number, toSearch: string) 
             headers: {
                 'Accept': 'application/json',
                 'Client-ID': 'ydvyzcbct3xmsd2z1yqvygldviukst',
-                'Authorization': 'Bearer rc2i6kl8y3gtscgcru9dgfyzrf7z2z',
+                'Authorization': 'Bearer j8w3mmd3jrpzjpvrbki8yrsrqciwt8',
             },
             body: `fields name, cover.url, summary, storyline;
             where cover.url != null & summary != null & storyline != null & name ~*"${toSearch}"*;  
@@ -68,7 +68,7 @@ export const getGamesById = async (id: Number) => {
             headers: {
                 'Accept': 'application/json',
                 'Client-ID': 'ydvyzcbct3xmsd2z1yqvygldviukst',
-                'Authorization': 'Bearer rc2i6kl8y3gtscgcru9dgfyzrf7z2z',
+                'Authorization': 'Bearer j8w3mmd3jrpzjpvrbki8yrsrqciwt8',
             },
             body: `fields name, cover.url, summary, storyline;
             where id = ${id};`,
