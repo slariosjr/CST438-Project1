@@ -23,7 +23,7 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="library"
         options={{
           title: 'library',
@@ -31,7 +31,7 @@ export default function TabLayout() {
             <TabBarIcon name={focused ? 'book' : 'book-outline'} color={color} />
           ),
         }}
-      />
+      /> */}
       <Tabs.Screen
         name="home"
         options={{
