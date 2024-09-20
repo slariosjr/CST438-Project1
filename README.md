@@ -30,6 +30,11 @@ You can use this app on Android, IOS, and the Web!
    ```bash
     npx expo start
    ```
+# Project 01 Retrospective and overview
+[Video Walkthrough]()
+[Github Repo](https://github.com/slariosjr/CST438-Project1)
+## Overview
+This is an app called Bun-dle that allows you to save your video game collection.
 #### Introduction:
 * Communication was managed through Slack.
 * Initially we had considered 12 stories.
