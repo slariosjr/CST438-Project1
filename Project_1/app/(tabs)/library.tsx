@@ -22,39 +22,39 @@ export default function TabTwoScreen() {
   // search state 
   const [search, setSearch] = useState('');
 
-  // Function: fetch games and update state
-  const fetchGames = useCallback(async (search = '') => {
-    // console.log(await getGames(4, offset, ''));
-    if (loading || !hasMore) return;
-    setLoading(true);
-    // get 10 games at a time 
-    const newGames = await getGames(10, offset, search); 
-    setGames(prevGames => [...prevGames, ...newGames] as never);
-    // save previous games 
-    setOffset(prevOffset => prevOffset + 10); 
-    if (newGames.length < 10) {
-      // no more games able to fetch
-      setHasMore(false); 
-    }
-    setLoading(false);
-  }, [loading, hasMore, offset]);
+//   // Function: fetch games and update state
+//   const fetchGames = useCallback(async (search = '') => {
+//     // console.log(await getGames(4, offset, ''));
+//     if (loading || !hasMore) return;
+//     setLoading(true);
+//     // get 10 games at a time 
+//     const newGames = await getGames(10, offset, search); 
+//     setGames(prevGames => [...prevGames, ...newGames] as never);
+//     // save previous games 
+//     setOffset(prevOffset => prevOffset + 10); 
+//     if (newGames.length < 10) {
+//       // no more games able to fetch
+//       setHasMore(false); 
+//     }
+//     setLoading(false);
+//   }, [loading, hasMore, offset]);
   
-  // fetch that immediately puts 10 games on the screen of the home page
-  useEffect(() => {
-    fetchGames();
+//   // fetch that immediately puts 10 games on the screen of the home page
+//   useEffect(() => {
+//     fetchGames();
     
-  }, []); 
+//   }, []); 
 
   // Function load more games button press with search
   const loadMoreGames = () => {
-    fetchGames(search);
+    // fetchGames(search);
   };
 
   const handleSearch = () => {
     setGames([]);
     setOffset(0);
     setHasMore(true);
-    fetchGames(search.toLowerCase());
+    // fetchGames(search.toLowerCase());
   }
 
   //navigation for going to a different screen 
@@ -65,10 +65,10 @@ export default function TabTwoScreen() {
       headerBackgroundColor={{ light: '#8100cc', dark: '#550087' }}
       headerImage={<Ionicons size={310} name="game-controller" style={styles.headerImage} />}>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">All Games</ThemedText>
+        <ThemedText type="title">Games</ThemedText>
       </ThemedView>
     {/* Search Bar */}
-    <View style={styles.searchContainer}>
+    {/* <View style={styles.searchContainer}>
       <TextInput
         style = {styles.searchInput}
         placeholder = "Search for a game!"
@@ -78,10 +78,7 @@ export default function TabTwoScreen() {
       <TouchableOpacity onPress={handleSearch}>
         <Ionicons name="search" size={24} color="black" />
       </TouchableOpacity>
-    </View>
-
-
-      <ThemedText>Here a full list of video games will be displayed!</ThemedText>
+    </View> */}
       <ScrollView contentContainerStyle={styles.gameList}>
         {/* for each game make it a clickable item with the game cover and the name */}
         {games.map((game: gameInfo) => (

@@ -59,6 +59,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   inputContainer: {
+    padding: 10,
     paddingHorizontal: 20,
     marginVertical: 20,
   },
@@ -91,5 +92,29 @@ export const styles = StyleSheet.create({
     width: 350,
     alignSelf: 'center', // This will center the logo horizontally // Ensure the logo takes up available space within the header
     alignItems: 'center',
+  },
+  headerTitle: {
+    right: -45,
+    top: -8,
+  },
+  backButton: {
+    position: 'absolute',
+    top: -18,
+    left: -26,
+    padding: 10,
+    backgroundColor: '#E0E0E0',
+    borderRadius: 30,
+    zIndex: 1,
+  },
+  container: {
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    marginTop: 20,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
   }
 });

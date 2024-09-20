@@ -95,9 +95,6 @@ export default function TabTwoScreen() {
         <Ionicons name="search" size={24} color="black" />
       </TouchableOpacity>
     </View>
-
-
-      <ThemedText>Here a full list of video games will be displayed!</ThemedText>
       <ScrollView contentContainerStyle={styles.gameList}>
         {/* for each game make it a clickable item with the game cover and the name */}
         {games.map((game: gameInfo) => (

@@ -5,10 +5,10 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useRouter } from 'expo-router';
-import { addUser, createDatabase, loginCheck, printAllTables, resetDB, user} from '@/lib/database';
+import { addUser, createDatabase, getUserData, loginCheck, printAllTables, resetDB, user} from '@/lib/database';
 import { openDatabaseAsync, SQLiteDatabase } from 'expo-sqlite';
-import { useTheme } from '@react-navigation/native';
 import { styles } from '@/lib/Style';
+import { userData } from '@/lib/user';
 
 let db: SQLiteDatabase; 
 
@@ -43,15 +43,16 @@ export default function HomeScreen() {
       return;
     }
 
-   
-    if (await loginCheck(db, username, password) == -1) {
+    let id:number = await loginCheck(db, username, password);
+    if ( id == -1) {
       Alert.alert('Login Failed! Check your username and password!');
       return;
     } else {
       Alert.alert(`Logged in with username: ${username}`);
+      userData = getUserData(db, id);
     }
 
-    router.back();  // Navigate to explore screen after successful login
+    router.push('/(tabs)/home');  // Navigate to explore screen after successful login
   };
 
 
@@ -70,7 +71,7 @@ export default function HomeScreen() {
         <HelloWave />
       </ThemedView>
 
-      <View style={styles.inputContainer}>
+      <ThemedView style={styles.inputContainer}>
         <TextInput
           placeholderTextColor={buttonColor}
           style={styles.input}
@@ -86,7 +87,7 @@ export default function HomeScreen() {
           secureTextEntry
           onChangeText={setPassword}
         />
-      </View>
+      </ThemedView>
 
       <Button title="Login!" onPress={handleLogin} />
 

@@ -8,6 +8,7 @@ import GameDetailsComp from '@/components/gameDetailComp'
 import React from 'react';
 import { createDatabase, printAllTables } from '@/lib/database';
 import { openDatabaseAsync } from 'expo-sqlite';
+import { styles } from '@/lib/Style';
 
 let db;
 
@@ -53,29 +54,3 @@ export default function GameDetailsScreen(route: RouteProp<ParamListBase>) {
     </ParallaxScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
-  },
-  headerTitle: {
-    right: -45,
-    top: -8,
-  },
-  backButton: {
-    position: 'absolute',
-    top: -18,
-    left: -26,
-    padding: 10,
-    backgroundColor: '#E0E0E0',
-    borderRadius: 30,
-    zIndex: 1,
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    gap: 8,
-  }
-});
