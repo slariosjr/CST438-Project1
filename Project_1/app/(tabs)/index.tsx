@@ -8,6 +8,7 @@ import { useRouter } from 'expo-router';
 import { addUser, createDatabase, loginCheck, printAllTables, resetDB, user} from '@/lib/database';
 import { openDatabaseAsync, SQLiteDatabase } from 'expo-sqlite';
 import { useTheme } from '@react-navigation/native';
+import { styles } from '@/lib/Style';
 
 let db: SQLiteDatabase; 
 
@@ -64,7 +65,7 @@ export default function HomeScreen() {
         />
       }>
       <ThemedText type="title">Welcome to Bun-dle!</ThemedText>
-      <ThemedView style={styles.titleContainer}>
+      <ThemedView style={styles.titleCenterContainer}>
 
         <HelloWave />
       </ThemedView>
@@ -97,29 +98,3 @@ export default function HomeScreen() {
     </ParallaxScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    alignItems: 'center',
-  },
-  inputContainer: {
-    paddingHorizontal: 20,
-    marginVertical: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 12,
-    paddingHorizontal: 8,
-    borderRadius: 4,
-  },
-  reactLogo: {
-    height: 160,
-    width: 350,
-    alignSelf: 'center', // This will center the logo horizontally // Ensure the logo takes up available space within the header
-    alignItems: 'center',
-    position: 'absolute',
-    bottom: 0
-  },
-});
