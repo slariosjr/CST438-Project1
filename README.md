@@ -72,7 +72,7 @@ My role was integrating the IGDB video game API to the app. I worked on the home
 + Favorite / most interesting part of this project
    + My favorite part of this project was seeing the app work on my phone when using the ExpoGo app and actively seeing the changes being made live, like seeing the API data show up on the home page.
 + If you could do it over, what would you change?
-   +I would work more on the design of the home page and game details page so that it looks nicer and cleaner. I would also do unit tests first and communicate with my team members more when I was having trouble. 
+   + I would work more on the design of the home page and game details page so that it looks nicer and cleaner. I would also do unit tests first and communicate with my team members more when I was having trouble. 
 + What is the most valuable thing you learned?
    + I learned that it is important to ask for help and go to the teacher if needed and to always update your team on what you're doing or what you're stuck on.
 
@@ -119,11 +119,11 @@ My role was integrating the IGDB video game API to the app. I worked on the home
    - Kyla: We were able to have a login, home, and settings tab.
    - Silvia:
    - Sergio:
-  - Think in terms of what did you set out to do and what actually got done?
-     - Alex:
-     - Kyla: I was set out to work on the home page and API integration and I was able to get the home page done.
-     - Silvia:
-     - Sergio:
+- Think in terms of what did you set out to do and what actually got done?
+  - Alex:
+  - Kyla: I was set out to work on the home page and API integration and I was able to get the home page done.
+  - Silvia:
+  - Sergio:
 - What was the largest victory?
    - Alex:
    - Kyla: I thought the largest victory was when the database was integrated into the project. 
