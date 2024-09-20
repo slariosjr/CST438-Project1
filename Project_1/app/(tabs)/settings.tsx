@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Button, Switch, Alert, Image, Linking, TouchableOpacity} from 'react-native';
+import {Button, Switch, Alert, Image, Linking, TouchableOpacity} from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -8,6 +8,7 @@ import { createDatabase, printAllTables, resetDB } from '@/lib/database';
 import { openDatabaseAsync, SQLiteDatabase } from 'expo-sqlite';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { styles } from '@/lib/Style';
 
 let db: SQLiteDatabase;
 
@@ -62,11 +63,13 @@ export default function HomeScreen() {
         Linking.openURL('https://github.com/slariosjr/CST438-Project1')
     }
 
-    //@
     return (
         <ParallaxScrollView
             headerBackgroundColor={{ light: '#8100cc', dark: '#550087' }}
-            headerImage={<Ionicons size={310} name="settings" style={styles.headerImage} />}>
+            headerImage={<Ionicons size={310} name="settings"  style={{color: '#30004d',
+                        bottom: -90,
+                        left: -35,
+                        position: 'absolute',}} />}>
             <ThemedText type="subtitle">Settings: </ThemedText>
             <ThemedView style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <ThemedText>Light or Dark mode: </ThemedText>
@@ -84,7 +87,7 @@ export default function HomeScreen() {
             <ThemedView>
                 <Image
                     source={require('@/assets/images/BundleLogox512x256.png')}
-                    style={styles.reactLogo}
+                    style={styles.reactlogoCenter}
                 />
                 <ThemedText style={styles.madeByText} type='title'> Made by: </ThemedText> 
                 <ThemedText style={styles.madeByText} type="defaultSemiBold"> Alexander Betancourt  </ThemedText>
@@ -101,41 +104,3 @@ export default function HomeScreen() {
         
     );
 }
-
-const styles = StyleSheet.create({
-    headerImage: {
-        color: '#30004d',
-        bottom: -90,
-        left: -35,
-        position: 'absolute',
-    },
-    titleContainer: {
-        alignItems: 'center',
-    },
-    inputContainer: {
-        paddingHorizontal: 20,
-        marginVertical: 20,
-    },
-    input: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginBottom: 12,
-        paddingHorizontal: 8,
-        borderRadius: 4,
-    },
-    reactLogo: {
-        height: 160,
-        width: 350,
-        alignSelf: 'center', // This will center the logo horizontally // Ensure the logo takes up available space within the header
-        alignItems: 'center',
-    },
-    madeByText: {
-        alignSelf: 'center',
-    },
-    hr: {
-        borderBottomWidth: 1,
-        borderBottomColor: 'gray',
-        marginVertical: 10,
-    },
-});

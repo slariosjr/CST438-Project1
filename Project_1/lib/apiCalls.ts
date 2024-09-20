@@ -43,8 +43,6 @@ export const getGames = async (limit: Number, offset: Number, toSearch: string) 
 // when game is clicked, bring user to a game details page with the game ID 
 export const onGameImageClick = (game: gameInfo,
     nav: NavigationProp<ReactNavigation.RootParamList>) => {
-    console.log(JSON.stringify(game));
-    Alert.alert(`Game Selected`, `You clicked on ${game.name} with game ID: ${game.id}`);
     // navigate to game details page
 
     // navigate to game details page with parameters

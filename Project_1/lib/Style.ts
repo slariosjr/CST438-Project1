@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
     bottom: -90,
     left: -35,
     position: 'absolute',
-  }, 
+  },
   titleContainer: {
     flexDirection: 'row',
     paddingVertical: 2,
@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
   buttonDark: {
     color: '#6047ff',
   },
-  bundleHi : {
+  bundleHi: {
     width: 64,
     height: 64,
   },
@@ -55,4 +55,66 @@ export const styles = StyleSheet.create({
   gameList: {
     padding: 10,
   },
+  titleCenterContainer: {
+    alignItems: 'center',
+  },
+  inputContainer: {
+    padding: 10,
+    paddingHorizontal: 20,
+    marginVertical: 20,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 12,
+    paddingHorizontal: 8,
+    borderRadius: 4,
+  },
+  reactLogo: {
+    height: 160,
+    width: 350,
+    alignSelf: 'center', // This will center the logo horizontally // Ensure the logo takes up available space within the header
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 0
+  },
+  madeByText: {
+    alignSelf: 'center',
+  },
+  hr: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'gray',
+    marginVertical: 10,
+  },
+  reactlogoCenter: {
+    height: 160,
+    width: 350,
+    alignSelf: 'center', // This will center the logo horizontally // Ensure the logo takes up available space within the header
+    alignItems: 'center',
+  },
+  headerTitle: {
+    right: -45,
+    top: -8,
+  },
+  backButton: {
+    position: 'absolute',
+    top: -18,
+    left: -26,
+    padding: 10,
+    backgroundColor: '#E0E0E0',
+    borderRadius: 30,
+    zIndex: 1,
+  },
+  container: {
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    marginTop: 20,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  }
 });

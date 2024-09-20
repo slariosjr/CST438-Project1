@@ -23,21 +23,37 @@ export default function TabTwoScreen() {
   const [search, setSearch] = useState('');
 
   // Function: fetch games and update state
-  const fetchGames = useCallback(async (search = '') => {
-    console.log(await getGames(4, offset, ''));
+  const fetchGames = async (search = '') => {
+    console.log("Fetch game called!")
     if (loading || !hasMore) return;
     setLoading(true);
-    // get 10 games at a time 
-    const newGames = await getGames(10, offset, search); 
-    setGames(prevGames => [...prevGames, ...newGames] as never);
-    // save previous games 
-    setOffset(prevOffset => prevOffset + 10); 
-    if (newGames.length < 10) {
-      // no more games able to fetch
-      setHasMore(false); 
+
+    try {
+      const newGames = await getGames(10, games.length, search.toLowerCase()); // Get 10 games at a time
+      setGames(prevGames => [...prevGames, ...newGames] as never);
+      setHasMore(newGames.length === 10); // Check if more games are available
+    } catch (error) {
+      console.error('Error fetching games:', error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  }, [loading, hasMore, offset]);
+  };
+
+  const searchGames = async (search = '') => {
+    console.log("Fetch game called!")
+    if (loading || !hasMore) return;
+    setLoading(true);
+
+    try {
+      const newGames = await getGames(10, 0, search.toLowerCase()); // Get 10 games at a time
+      setGames(prevGames => [...prevGames, ...newGames] as never);
+      setHasMore(newGames.length === 10); // Check if more games are available
+    } catch (error) {
+      console.error('Error fetching games:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
   
   // fetch that immediately puts 10 games on the screen of the home page
   useEffect(() => {
@@ -47,14 +63,14 @@ export default function TabTwoScreen() {
 
   // Function load more games button press with search
   const loadMoreGames = () => {
-    fetchGames(search);
+    fetchGames(search.toLowerCase());
   };
 
   const handleSearch = () => {
     setGames([]);
     setOffset(0);
     setHasMore(true);
-    fetchGames(search.toLowerCase());
+    searchGames(search.toLowerCase());
   }
 
   //navigation for going to a different screen 
@@ -79,9 +95,6 @@ export default function TabTwoScreen() {
         <Ionicons name="search" size={24} color="black" />
       </TouchableOpacity>
     </View>
-
-
-      <ThemedText>Here a full list of video games will be displayed!</ThemedText>
       <ScrollView contentContainerStyle={styles.gameList}>
         {/* for each game make it a clickable item with the game cover and the name */}
         {games.map((game: gameInfo) => (

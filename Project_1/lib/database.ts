@@ -45,6 +45,9 @@ const queryUserFromPasswordSQLInstruction: string = `
 const queryUserFromUserSQLInstruction: string = `
     SELECT * FROM userInfo WHERE username = ?;`;
 
+const queryUserFromUserIDSQLInstruction: string = `
+    SELECT * FROM userInfo WHERE userID = ?;`;
+
 const queryUserFromLoginSQLInstruction: string = `
     SELECT * FROM userInfo WHERE username = ? AND password = ?;`;
 
@@ -188,7 +191,7 @@ export const printAllTables = async (db: SQLite.SQLiteDatabase) => {
 
 }
 
-export const loginCheck = async (db: SQLite.SQLiteDatabase, username: string, password: string):Promise<Number> => {
+export const loginCheck = async (db: SQLite.SQLiteDatabase, username: string, password: string):Promise<number> => {
     try {
         console.log(username);
         console.log(password);
@@ -204,3 +207,8 @@ export const loginCheck = async (db: SQLite.SQLiteDatabase, username: string, pa
         throw error;
     }
 }
+
+export const getUserData = async (db: SQLite.SQLiteDatabase, uID: number): Promise<any> => {
+    const userData = await db.getFirstAsync(queryUserFromUserIDSQLInstruction, [uID]);
+    return userData;
+  };

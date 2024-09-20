@@ -5,9 +5,10 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useRouter } from 'expo-router';
-import { addUser, createDatabase, loginCheck, printAllTables, resetDB, user} from '@/lib/database';
+import { addUser, createDatabase, getUserData, loginCheck, printAllTables, resetDB, user} from '@/lib/database';
 import { openDatabaseAsync, SQLiteDatabase } from 'expo-sqlite';
-import { useTheme } from '@react-navigation/native';
+import { styles } from '@/lib/Style';
+import { userData } from '@/lib/user';
 
 let db: SQLiteDatabase; 
 
@@ -42,15 +43,16 @@ export default function HomeScreen() {
       return;
     }
 
-   
-    if (await loginCheck(db, username, password) == -1) {
+    let id:number = await loginCheck(db, username, password);
+    if ( id == -1) {
       Alert.alert('Login Failed! Check your username and password!');
       return;
     } else {
       Alert.alert(`Logged in with username: ${username}`);
+      userData = getUserData(db, id);
     }
 
-    router.back();  // Navigate to explore screen after successful login
+    router.push('/(tabs)/home');  // Navigate to explore screen after successful login
   };
 
 
@@ -64,12 +66,12 @@ export default function HomeScreen() {
         />
       }>
       <ThemedText type="title">Welcome to Bun-dle!</ThemedText>
-      <ThemedView style={styles.titleContainer}>
+      <ThemedView style={styles.titleCenterContainer}>
 
         <HelloWave />
       </ThemedView>
 
-      <View style={styles.inputContainer}>
+      <ThemedView style={styles.inputContainer}>
         <TextInput
           placeholderTextColor={buttonColor}
           style={styles.input}
@@ -85,7 +87,7 @@ export default function HomeScreen() {
           secureTextEntry
           onChangeText={setPassword}
         />
-      </View>
+      </ThemedView>
 
       <Button title="Login!" onPress={handleLogin} />
 
@@ -97,29 +99,3 @@ export default function HomeScreen() {
     </ParallaxScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    alignItems: 'center',
-  },
-  inputContainer: {
-    paddingHorizontal: 20,
-    marginVertical: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 12,
-    paddingHorizontal: 8,
-    borderRadius: 4,
-  },
-  reactLogo: {
-    height: 160,
-    width: 350,
-    alignSelf: 'center', // This will center the logo horizontally // Ensure the logo takes up available space within the header
-    alignItems: 'center',
-    position: 'absolute',
-    bottom: 0
-  },
-});
