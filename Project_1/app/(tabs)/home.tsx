@@ -1,13 +1,14 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { StyleSheet, Image, Platform, Button, Alert, TouchableOpacity, View, ScrollView, Text, TextInput } from 'react-native';
+import {Image, Button, TouchableOpacity, View, ScrollView, TextInput } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigation } from 'expo-router';
-
+import { styles } from '@/lib/Style';
 // Just abstracting out code.. 
-import { getGames, onGameImageClick, gameInfo} from '@/lib/apiCalls';
+import { getGames, onGameImageClick, gameInfo, getGamesById} from '@/lib/apiCalls';
+import React from 'react';
 
 export default function TabTwoScreen() {
   // store the fetched games
@@ -23,6 +24,7 @@ export default function TabTwoScreen() {
 
   // Function: fetch games and update state
   const fetchGames = useCallback(async (search = '') => {
+    console.log(await getGames(4, offset, ''));
     if (loading || !hasMore) return;
     setLoading(true);
     // get 10 games at a time 
@@ -40,6 +42,7 @@ export default function TabTwoScreen() {
   // fetch that immediately puts 10 games on the screen of the home page
   useEffect(() => {
     fetchGames();
+    
   }, []); 
 
   // Function load more games button press with search
@@ -109,46 +112,3 @@ export default function TabTwoScreen() {
     </ParallaxScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  headerImage: {
-    color: '#30004d',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    margin: 10,
-    padding: 5,
-    borderRadius: 5,
-    backgroundColor: '#E0E0E0',
-  },
-  searchInput: {
-    flex: 1,
-    padding: 5,
-    fontSize: 16,
-  },
-  gameItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-  },
-  gameIcon: {
-    width: 50,
-    height: 50,
-    marginRight: 10,
-    borderRadius: 8,
-  },
-  gameTitle: {
-    fontSize: 18,
-  },
-  gameList: {
-    padding: 10,
-  },
-});

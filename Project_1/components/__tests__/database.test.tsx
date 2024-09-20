@@ -1,31 +1,23 @@
-import * as  SQLlite from 'expo-sqlite';
-const {
-  createDatabase,
-  addUser,
-  addGame,
-  addGameToUser,
-  removeUser,
-  resetDB,
-  loginCheck,
-} = require('@/lib/database'); 
+import { addGame, addGameToUser, addUser, createDatabase, loginCheck, removeUser, resetDB } from '../../lib/database';
 
 
-jest.mock('expo-sqlite', () => ({
-  openDatabase: jest.fn(() => ({
-    execAsync: jest.fn(),
-    runAsync: jest.fn(),
-    getFirstAsync: jest.fn(),
-    getAllAsync: jest.fn(),
-  })),
-
-}));
 
 describe('Database Functions', () => {
-  let db;
+  let db: SQLite.SQLiteDatabase;
 
   beforeAll(async () => {
-    db = await openDatabase('test.db');
-  });w
+    db = {
+      openDatabase: jest.fn(),
+        execAsync: jest.fn(),
+        runAsync: jest.fn(),
+        getFirstAsync: jest.fn(),
+        getAllAsync: jest.fn(),
+      } as unknown as SQLite.SQLiteDatabase;
+    
+    (SQLite.openDatabaseAsync as jest.Mock).mockResolvedValue(db);
+
+    db = await SQLite.openDatabaseAsync('test.db');
+  });
 
   afterEach(() => {
     jest.clearAllMocks();
@@ -37,7 +29,7 @@ describe('Database Functions', () => {
   });
 
   test('addUser should add a user if username does not exist', async () => {
-    db.getFirstAsync.mockResolvedValueOnce(null); 
+    db.getFirstAsync.mockResolvedValueOnce(null);
     const result = await addUser(db, { username: 'testuser', password: 'testpass' });
     expect(db.runAsync).toHaveBeenCalledWith(expect.any(String), ['testuser', 'testpass']);
     expect(result).toBe(true);
@@ -61,7 +53,7 @@ describe('Database Functions', () => {
   });
 
   test('removeUser should remove user if password matches', async () => {
-    db.getFirstAsync.mockResolvedValueOnce({ username: 'testuser' }); 
+    db.getFirstAsync.mockResolvedValueOnce({ username: 'testuser' });
     const result = await removeUser(db, 'testpass');
     expect(db.runAsync).toHaveBeenCalledWith(expect.any(String), ['testuser']);
     expect(result).toBe(true);
@@ -82,13 +74,13 @@ describe('Database Functions', () => {
   });
 
   test('loginCheck should return userID if credentials are correct', async () => {
-    db.getFirstAsync.mockResolvedValueOnce({ userID: 1 }); 
+    db.getFirstAsync.mockResolvedValueOnce({ userID: 1 });
     const result = await loginCheck(db, 'testuser', 'testpass');
     expect(result).toBe(1);
   });
 
   test('loginCheck should return -1 if credentials are incorrect', async () => {
-    db.getFirstAsync.mockResolvedValueOnce(null); 
+    db.getFirstAsync.mockResolvedValueOnce(null);
     const result = await loginCheck(db, 'testuser', 'wrongpass');
     expect(result).toBe(-1);
   });

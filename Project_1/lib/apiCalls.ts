@@ -12,7 +12,6 @@ export type gameInfo = {
     name: string
 }
 
-// TODO: UNIT TEST THIS 
 // API getGames Function 
 // limit: Number, offset: Number, toSearch: string
 export const getGames = async (limit: Number, offset: Number, toSearch: string) => {
@@ -56,7 +55,7 @@ export const onGameImageClick = (game: gameInfo,
     nav.navigate('gameDetails', { gameId: game.id, cover: coverUrl, gameName: game.name, gameStoryline: game.storyline, gameSummary: game.summary });
 };
 
-// TODO: UNIT TEST THIS 
+
 // Get the game by ID
 export const getGamesById = async (id: Number) => {
     const URL = "https://api.igdb.com/v4/games/";
