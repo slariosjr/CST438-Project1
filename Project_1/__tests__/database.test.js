@@ -1,4 +1,4 @@
-const { openDatabase } = require('expo-sqlite');
+import * as  SQLlite from 'expo-sqlite';
 const {
   createDatabase,
   addUser,
@@ -7,7 +7,7 @@ const {
   removeUser,
   resetDB,
   loginCheck,
-} = require('../database'); 
+} = require('@/lib/database'); 
 
 
 jest.mock('expo-sqlite', () => ({
@@ -17,6 +17,7 @@ jest.mock('expo-sqlite', () => ({
     getFirstAsync: jest.fn(),
     getAllAsync: jest.fn(),
   })),
+
 }));
 
 describe('Database Functions', () => {
@@ -24,7 +25,7 @@ describe('Database Functions', () => {
 
   beforeAll(async () => {
     db = await openDatabase('test.db');
-  });
+  });w
 
   afterEach(() => {
     jest.clearAllMocks();

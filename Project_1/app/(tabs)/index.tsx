@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Image, StyleSheet, Button, TextInput, Alert } from 'react-native';
+import { View, Image, StyleSheet, Button, TextInput, Alert, useColorScheme, ColorSchemeName } from 'react-native';
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
@@ -7,11 +7,14 @@ import { ThemedView } from '@/components/ThemedView';
 import { useRouter } from 'expo-router';
 import { addUser, createDatabase, loginCheck, printAllTables, resetDB, user} from '@/lib/database';
 import { openDatabaseAsync, SQLiteDatabase } from 'expo-sqlite';
+import { useTheme } from '@react-navigation/native';
 
 let db: SQLiteDatabase; 
 
 export default function HomeScreen() {
   const router = useRouter();
+  const colorScheme: ColorSchemeName = useColorScheme();
+  const buttonColor = colorScheme === 'dark' ? "#ECEDEE" : "#11181C";
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -46,8 +49,8 @@ export default function HomeScreen() {
     } else {
       Alert.alert(`Logged in with username: ${username}`);
     }
-    //@ts-ignore
-    router.push('/home');  // Navigate to explore screen after successful login
+
+    router.back();  // Navigate to explore screen after successful login
   };
 
 
@@ -68,12 +71,14 @@ export default function HomeScreen() {
 
       <View style={styles.inputContainer}>
         <TextInput
+          placeholderTextColor={buttonColor}
           style={styles.input}
           placeholder="Username"
           value={username}
           onChangeText={setUsername}
         />
         <TextInput
+          placeholderTextColor={buttonColor}
           style={styles.input}
           placeholder="Password"
           value={password}
