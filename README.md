@@ -3,7 +3,7 @@
 Bun-dle is a app to view your video game collection locally! 
 
 
-You can use this app on Android, IOS, and the Web!
+You can use this app on Android, and on IOS!
 
 <hr>
 
@@ -49,17 +49,17 @@ This is an app called Bun-dle that allows you to save your video game collection
 #### What was your role / which stories did you work on
 
 + What was the biggest challenge? 
-  + 
+  + READING DOCUMENTATION, and learning react native. 
 + Why was it a challenge?
-   +    
+   +  I spent like 30+ hours reading documentation, to ether get a non answer. React native makes me really understand why Developers hate the Facebook ecosystem.
   + How was the challenge addressed?.
-     + 
+     + I read lot of documentation, asked alot of questions to some of my friends in class. I managed to get alot done. 
 + Favorite / most interesting part of this project
-   + 
+   + I actually liked the database portion of the project, Database design is actually really mentally stimulating. 
 + If you could do it over, what would you change?
-   + 
+   + Not use react native, but keep SQLite and maybe use something else for the application, like tauri native. 
 + What is the most valuable thing you learned?
-   + 
+   + How to properly use github issues, to mark difficulty and to show progress. I think the next project I do am gonna stay away from design roles for abit since am feeling the burnout. 
 
 ### Kyla Usi
 1. Kyla's pull requests are [here](https://github.com/slariosjr/CST438-Project1/pulls?q=is%3Aopen%2Fclosed+is%3Apr+author%3Akylamusi)
@@ -121,17 +121,17 @@ My role on this project was creating the Login and create Account pages.
 
 ## Conclusion
 - How successful was the project?
-   - Alex:
+   - Alex: The full project minus some features, that aren't really needed for MVP goal.  
    - Kyla: We were able to have a login, home, and settings tab.
    - Silvia: With the time frame it was very successfull in my eyes we got a lot of things done.
    - Sergio:
 - Think in terms of what did you set out to do and what actually got done?
-  - Alex:
+  - Alex: I wore many hats, dependng on the weather. Am actually really happy for how the database turned out, and doing the last round of polish before its due is satisifing. 
   - Kyla: I was set out to work on the home page and API integration and I was able to get the home page done.
   - Silvia: Was able to accomplish the login and create account to work with the login screen.
   - Sergio:
 - What was the largest victory?
-   - Alex:
+   - Alex: When The database was programmed in one day, and the last features was programed in a drunken all nigher. Fundamentally proving the blamer peak is not a myth but the truth. Its going to be a fun story am gonna randomly pull out of nowhere. I remember logging into warframe after pushing my last PR, and it was well earned. 
    - Kyla: I thought the largest victory was when the database was integrated into the project. 
    - Silvia: Getting the database integrated with the project shoutout to Alex! 
    - Sergio:

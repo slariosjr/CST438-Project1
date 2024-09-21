@@ -1,6 +1,7 @@
 import * as SQLite from 'expo-sqlite';
 
 // https://youtu.be/N-7gbWKbXbQ?si=Usg79F4dyHVUW-EJ
+// I like to remind anyone reading, that i wrote this code while drinking some of my old seltzers in my fridge. 
 // - Alex
 
 export type user = {
@@ -71,6 +72,11 @@ const removeUserSQLInstruction: string = `
 const removeGameFromUserSQLInstruction: string = `
     DELETE FROM userToGame WHERE userID = ? AND gameID = ?;`;
 
+const checkIfUserHasGame: string = `
+    SELECT g.* FROM userToGame ug 
+    INNER JOIN game g ON ug.gameID = g.gameID 
+    WHERE ug.userID = ? AND g.gameID = ?;`;
+
 const checkIfUserExists: string = `
     SELECT COUNT(*) FROM userInfo WHERE password = ?`;
 
@@ -93,8 +99,6 @@ export const createDatabase = async (): Promise<void> => {
         throw error;
     }
     // get the instructions
-
-
     await executeSQL(db, dbIntializeSQLInstructions);
 }
 
@@ -103,7 +107,7 @@ const executeSQL = async (db: SQLite.SQLiteDatabase, sqlInstruction: string): Pr
         await db.execAsync(sqlInstruction);
         return true;
     } catch (error) {
-        console.error(`Error: ${error}`)
+        console.error(`Error: executeSQL ${error}`)
         throw error;
     }
 }
@@ -125,7 +129,8 @@ export const addGame = async (db: SQLite.SQLiteDatabase, gameID: number) => {
     try {
         await db.runAsync(addGameSQLInstruction, [gameID]);
     } catch (error) {
-        console.error(`Error: ${error}`)
+        return;
+        console.error(`Error: addGame ${error}`)
         throw error;
     }
 }
@@ -137,7 +142,8 @@ export const addGameToUser = async (db: SQLite.SQLiteDatabase, gameID: number, u
     try {
         await db.runAsync(addGameToUserInstruction, [userID, gameID, formattedDate]);
     } catch (error) {
-        console.error(`Error: ${error}`)
+        return;
+        console.error(`Error: addGameToUser ${error}`)
         throw error;
     }
 }
@@ -153,7 +159,7 @@ export const removeUserbyPassword = async (db: SQLite.SQLiteDatabase, password: 
         await db.runAsync(removeUserSQLInstruction, [user.username]);
         return true;
     } catch (error) {
-        console.error(`Error: ${error}`)
+        console.error(`Error: removeUserbyPassword ${error}`)
         throw error;
     }
 }
@@ -161,7 +167,7 @@ export const removeUserbyPassword = async (db: SQLite.SQLiteDatabase, password: 
 export const resetDB = async (db: SQLite.SQLiteDatabase) => {
 
     if (!await executeSQL(db, dropSQLInstruction)) {
-        console.error("Error: Could not drop tables!");
+        console.error("Error: Could not drop atables!");
         return;
     }
     if (!await executeSQL(db, dbIntializeSQLInstructions)) {
@@ -188,16 +194,16 @@ export const printAllTables = async (db: SQLite.SQLiteDatabase) => {
 
 }
 
+
 export const loginCheck = async (db: SQLite.SQLiteDatabase, username: string, password: string): Promise<number> => {
     try {
         const user = await db.getFirstAsync(queryUserFromLoginSQLInstruction, [username, password]);
-        console.log(user);
         if (!user) return -1;  // User not found
 
         //@ts-ignore Again Typescript tantrum!
         return user.userID;
     } catch (error) {
-        console.error(`Error: ${error}`)
+        console.error(`Error: loginCheck ${error}`)
         throw error;
     }
 }
@@ -212,7 +218,7 @@ export const removeGameFromUser = async (db: SQLite.SQLiteDatabase, uID: number,
         await db.runAsync(removeGameFromUserSQLInstruction, [uID, gID]);
         return true;
     } catch (error) {
-        console.error(`Error: ${error}`)
+        console.error(`Error: removeGameFromUser ${error}`)
         throw error;
     }
 };
@@ -222,11 +228,38 @@ export const removeGame = async (db: SQLite.SQLiteDatabase, gID: number): Promis
         await db.runAsync(removeGameSQLInstruction, [gID]);
         return true;
     } catch (error) {
-        console.error(`Error: ${error}`)
+        console.error(`Error: removeGame ${error}`)
         throw error;
     }
 };
 
-export const checkIfGameInUser = async(db: SQLite.SQLiteDatabase, uID: number, gID: number) => {
+// Yappdollar approved!
+// 小红书! (Xiǎo hóng shū)
+export const checkIfGameInUser = async ( db: SQLite.SQLiteDatabase, uID: number, gID: number): Promise<any | null> => {
+    console.log("checkIfGameInUser");
+    try {
+        const result = await db.getFirstAsync(checkIfUserHasGame, [uID, gID]);
+        if (!result) {
+            console.log(`No game found for userID: ${uID} and gameID: ${gID}`);
+            return null;
+        }
+        console.log("checkIfGameInUser result:");
+        console.log(result);
+        return result; 
+    } catch (error) {
+        console.error(`Error in checkIfGameInUser: ${error}`);
+        throw error; 
+    }
+};
 
+// Yappdollar approved!
+// 小红书! (Xiǎo hóng shū)
+export const getGameInUser = async (db: SQLite.SQLiteDatabase, uID: number | null): Promise<any> => {
+    try {
+        const result = await db.getAllAsync(queryGameForUserSQLInstruction, [uID]);
+        return result;
+    } catch (error) {
+        console.error(`Error: checkIfGameInUser ${error}`)
+        throw error;
+    }
 }

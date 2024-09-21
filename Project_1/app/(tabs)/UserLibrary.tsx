@@ -1,16 +1,17 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Button, FlatList, ScrollView, StyleSheet } from 'react-native';
-import { openDatabaseAsync } from 'expo-sqlite';
-import { createDatabase, addGame, addGameToUser, printAllTables } from '@/lib/database';
+import { Button, FlatList, ScrollView, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { createDatabase, addGame, addGameToUser, printAllTables, getGameInUser } from '@/lib/database';
 import { SQLiteAnyDatabase } from 'expo-sqlite/build/NativeStatement';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
+import { useFocusEffect } from '@react-navigation/native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from '@/lib/Style'
-import { router } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 import UserContext, { UserProvider } from '@/app/userContext';
 import { checkLogin, getDB } from '@/lib/user';
+import { gameInfo, getGamesById, onGameImageClick } from '@/lib/apiCalls';
 type Game = {
   gameID: number;
   name: string;
@@ -18,7 +19,7 @@ type Game = {
 
 
 const userLibrary = () => {
-  const [games, setGames] = useState<Game[]>([]);
+  const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isLoggedIn, setLogin] = useState(false);
   //@ts-ignore
@@ -31,55 +32,77 @@ const userLibrary = () => {
   let db: SQLiteAnyDatabase;
 
   const asyncFunc = async () => {
-    await checkLogin(userID, setLogin);
+    if (userID === null || userID === -1) {
+      await setLogin(false);
+    } else await setLogin(true);
     db = await getDB();
+    if (userID === null || userID === -1) return;
+    const result = await getGameInUser(db, userID);
+
+    //@ts-ignore
+    const fetchedGames: gameInfo[] = await Promise.all(
+      result.map(async (element: { gameID: number }) => await getGamesById(element.gameID))
+    );
+
+
+    //@ts-ignore
+    setGames(fetchedGames);
+    console.log([fetchedGames[0].id]);
+    setLoading(false);
   }
 
   useEffect(() => {
     asyncFunc();
-  }, []);
+  }, [userID, isLoggedIn, loading]);
 
-
-  const fetchSavedGames = async () => {
-
-  };
-
+  let navigation = useNavigation();
+  // checkLogin(userID, setLogin);
   return (
-    <UserProvider>
-      <ParallaxScrollView
-        headerBackgroundColor={{ light: '#8100cc', dark: '#550087' }}
-        headerImage={<Ionicons size={310} name="game-controller" style={styles.headerImage} />}
-      >
-        <ThemedText type="title">Your Library</ThemedText>
-        {isLoggedIn ? (<>
-          {loading ? (<ThemedText>Loading your games...</ThemedText>) : (
-            <>
-              {games.length === 0 ? (
-                <ThemedText>No games added to your library yet.</ThemedText>
-              ) : (
-                <ScrollView contentContainerStyle={styles.gameList}>
-                  <FlatList
-                    data={games}
-                    keyExtractor={(item) => item.gameID.toString()}
-                    renderItem={({ item }) => (
-                      <ThemedView style={styles.gameItem}>
-                        <ThemedText style={styles.gameTitle}>{item.name || 'Unknown Game'}</ThemedText>
-                      </ThemedView>
-                    )}
-                  />
-                </ScrollView>
-              )}
-            </>
-          )}
-        </>) : (<>
-          <ThemedText>Please log in...</ThemedText>
-          <Button title="Login!" onPress={async () => {
-            router.push("/(tabs)/")
-          }} />
-        </>
+    <ParallaxScrollView
+      headerBackgroundColor={{ light: '#8100cc', dark: '#550087' }}
+      headerImage={<Ionicons size={310} name="game-controller" style={styles.headerImage} />}
+    >
+      <ThemedText type="title">Your Library</ThemedText>
+      {isLoggedIn ? (<>
+        {loading ? (<ThemedText>Loading your games...</ThemedText>) : (
+          <>
+            {games.length === 0 ? (
+              <ThemedText>No games added to your library yet.</ThemedText>
+            ) : (
+              <ScrollView contentContainerStyle={styles.gameList}>
+                {/* for each game make it a clickable item with the game cover and the name */}
+                {games.map((game: gameInfo) => (
+                  <TouchableOpacity key={game.id} onPress={() => onGameImageClick(game, navigation, userID)}>
+                    <ThemedView style={styles.gameItem}>
+                      {game.cover?.url ? (
+                        <Image
+                          source={{ uri: `https:${game.cover.url}` }}
+                          style={styles.gameIcon}
+                          resizeMode="cover"
+                        />
+                      ) : (
+                        <Image
+                          source={{ uri: `https://static.thenounproject.com/png/11204-200.png` }}
+                          style={styles.gameIcon}
+                          resizeMode="cover"
+                        />
+                      )}
+                      <ThemedText style={styles.gameTitle}>{game.name}</ThemedText>
+                    </ThemedView>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            )}
+          </>
         )}
-      </ParallaxScrollView>
-    </UserProvider>
+      </>) : (<>
+        <ThemedText>Please log in...</ThemedText>
+        <Button title="Login!" onPress={async () => {
+          router.push("/(tabs)/")
+        }} />
+      </>
+      )}
+    </ParallaxScrollView>
   );
 };
 

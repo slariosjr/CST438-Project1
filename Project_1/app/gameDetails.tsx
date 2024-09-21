@@ -9,7 +9,7 @@ import React from 'react';
 import { styles } from '@/lib/Style';
 import UserContext, { UserProvider } from '@/app/userContext';
 import { checkLogin, getDB } from '@/lib/user';
-import { addGame, addGameToUser, removeGame, removeGameFromUser } from '@/lib/database';
+import { addGame, addGameToUser, checkIfGameInUser, removeGame, removeGameFromUser } from '@/lib/database';
 import { SQLiteDatabase } from 'expo-sqlite';
 let db: SQLiteDatabase;
 
@@ -19,6 +19,7 @@ export default function GameDetailsScreen(route: RouteProp<ParamListBase>) {
   // Typescript throws a tantrum! 
   // @ts-ignore
   const { gameId, cover, gameName, gameStoryline, gameSummary, userID } = useRoute().params ?? {};
+  console.log(userID)
   let compData: any = [gameId, cover, gameName, gameStoryline, gameSummary];
   // track if game is saved or not
   const [isSaved, setIsSaved] = useState(false);
@@ -29,19 +30,22 @@ export default function GameDetailsScreen(route: RouteProp<ParamListBase>) {
   const asyncFunc = async () => {
     await checkLogin(userID, setLogin);
     db = await getDB();
+    if(await checkIfGameInUser(db, userID, gameId) == null) setIsSaved(false);
+    else setIsSaved(true);
   }
 
   useEffect(() => {
     asyncFunc();
 
-  }, []);
+  }, [isLoggedIn, isSaved]);
 
-  const saveGame = () => {
+  const saveGame = async() => {
     // toggle the saved state
+    if(await checkIfGameInUser(db, userID, gameId) == null) console.log("Yeah its not tied to this user.")
     if(isSaved) {
       Alert.alert(`Unadded Game with Game ID: ${gameId}`);
-      removeGame(db, gameId);
-      removeGameFromUser(db, userID, gameId);
+      await removeGame(db, gameId);
+      await removeGameFromUser(db, userID, gameId);
       setIsSaved(false);
       return;
     }

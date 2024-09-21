@@ -14,6 +14,8 @@ import { checkLogin, getDB } from '@/lib/user';
 
 
 let db: SQLiteDatabase;
+// After rewritting this, I know why webdevs are really grumpy!
+// ☆*: .｡. o(≧▽≦)o .｡.:*☆
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -36,8 +38,9 @@ export default function HomeScreen() {
   }
 
   useEffect(() => {
+    console.log(userID);
     asyncFunc();
-  }, []);
+  }, [isLoggedIn, userID]);
 
   const handleLogin = async () => {
     if (username === '' || password === '') {
@@ -62,7 +65,6 @@ export default function HomeScreen() {
   return (
     <>
       {/* @ts-ignore */}
-      <UserProvider>
         <ParallaxScrollView
           headerBackgroundColor={{ light: '#8100cc', dark: '#550087' }}
           headerImage={
@@ -108,7 +110,6 @@ export default function HomeScreen() {
             onPress={() => router.push('/createAccount')}  // Navigate to Create Account screen
           />
         </ParallaxScrollView>
-      </UserProvider>
     </>
   );
 }

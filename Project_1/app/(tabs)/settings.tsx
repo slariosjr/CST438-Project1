@@ -14,6 +14,7 @@ import UserContext, { UserProvider } from '@/app/userContext';
 import { checkLogin, getDB } from '@/lib/user';
 
 let db: SQLiteDatabase;
+// (✿◡‿◡)
 
 export default function HomeScreen() {
     const [isEnabled, setIsEnabled] = useState(false);
@@ -58,8 +59,9 @@ export default function HomeScreen() {
     }
 
     useEffect(() => {
+        console.log(userID);
         asyncFunc();
-    }, []);
+    }, [isLoggedIn, userID]);
 
     const clearDbAlert = async () => {
         Alert.alert('Clear the local database?', 'The data is not recoverable!', [
@@ -78,28 +80,11 @@ export default function HomeScreen() {
         ]);
     }
 
-    const deleteUser = async () => {
-        Alert.alert('Do you want to delete the current user?', 'The data is not recoverable!', [
-            {
-                text: 'Cancel',
-                onPress: () => console.log('Cancel Pressed'),
-                style: 'cancel',
-            },
-            {
-                text: 'Yes', onPress: () => {
-                    Alert.alert("Current User Deleted, returning to login screen");
-                    router.push("/(tabs)/");
-                }
-            },
-        ]);
-    }
-
     const gotoGithub = async () => {
         Linking.openURL('https://github.com/slariosjr/CST438-Project1')
     }
 
     return (
-        <UserProvider>
             <ParallaxScrollView
                 headerBackgroundColor={{ light: '#8100cc', dark: '#550087' }}
                 headerImage={<Ionicons size={310} name="settings" style={{
@@ -118,7 +103,6 @@ export default function HomeScreen() {
                         value={isEnabled}
                     />
                 </ThemedView>
-                {isLoggedIn ? (<Button title="Delete user?" onPress={deleteUser} color={"#eb4034"} />) : (<></>)}
                 <Button title="Clear database?" onPress={clearDbAlert} color={"#eb4034"} />
                 <Button title="Load fake data?" onPress={loadFakeData} color={"#006eff"} />
                 <ThemedView style={styles.hr} />
@@ -140,6 +124,5 @@ export default function HomeScreen() {
                     </TouchableOpacity>
                 </ThemedView>
             </ParallaxScrollView>
-        </UserProvider>
     );
 }

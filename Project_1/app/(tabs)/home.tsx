@@ -17,6 +17,7 @@ let db: SQLiteDatabase;
 
 // https://youtu.be/-UHUTsx-WCU?si=3-CXjnbGJ9AqvNuS
 // AM a fucking rockstar! my react code sucks. 🎸🔥
+// This aint C or C++, or rust soo!
 // - Alex @ 9/21/2024 - 3:27AM
 /*
 
@@ -37,6 +38,7 @@ let db: SQLiteDatabase;
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⡇⠀⠀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀
 
 */
+// The divine creator has punished me so please send good documentation.
 
 export default function TabTwoScreen() {
   // store the fetched games
@@ -61,6 +63,7 @@ export default function TabTwoScreen() {
 
   // Function: fetch games and update state
   const fetchGames = async (search = '') => {
+    // Me and graeme had a stroke trying to fix this, to only find out that this query had a offset variable! 
     console.log("Fetch game called!")
     if (loading || !hasMore) return;
     setLoading(true);
@@ -99,10 +102,11 @@ export default function TabTwoScreen() {
   }
 
   useEffect(() => {
+    console.log(userID);
     asyncFunc();
     fetchGames();
 
-  }, []);
+  }, [isLoggedIn, userID]);
 
   // Function load more games button press with search
   const loadMoreGames = () => {
