@@ -30,20 +30,22 @@ export default function GameDetailsScreen(route: RouteProp<ParamListBase>) {
   const asyncFunc = async () => {
     await checkLogin(userID, setLogin);
     db = await getDB();
+    if(await checkIfGameInUser(db, userID, gameId) == null) setIsSaved(false);
+    else setIsSaved(true);
   }
 
   useEffect(() => {
     asyncFunc();
 
-  }, []);
+  }, [isLoggedIn, isSaved]);
 
-  const saveGame = () => {
+  const saveGame = async() => {
     // toggle the saved state
-    checkIfGameInUser(db, userID, gameId);
+    if(await checkIfGameInUser(db, userID, gameId) == null) console.log("Yeah its not tied to this user.")
     if(isSaved) {
       Alert.alert(`Unadded Game with Game ID: ${gameId}`);
-      removeGame(db, gameId);
-      removeGameFromUser(db, userID, gameId);
+      await removeGame(db, gameId);
+      await removeGameFromUser(db, userID, gameId);
       setIsSaved(false);
       return;
     }

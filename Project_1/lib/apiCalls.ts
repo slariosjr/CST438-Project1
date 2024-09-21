@@ -77,7 +77,7 @@ export const getGamesById = async (id: Number) => {
 
         const data = await response.json();
 
-        return data;
+        return data[0];
     } catch (error) {
         console.error('Error fetching game:', error);
         throw error; // Re-throw the error for handling in calling code

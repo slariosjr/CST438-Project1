@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Button, FlatList, ScrollView, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { openDatabaseAsync } from 'expo-sqlite';
 import { createDatabase, addGame, addGameToUser, printAllTables, getGameInUser } from '@/lib/database';
 import { SQLiteAnyDatabase } from 'expo-sqlite/build/NativeStatement';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
+import { useFocusEffect } from '@react-navigation/native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from '@/lib/Style'
@@ -38,28 +38,25 @@ const userLibrary = () => {
     db = await getDB();
     if (userID === null || userID === -1) return;
     const result = await getGameInUser(db, userID);
-    let gam:any = [];
-    //@ts-ignore
-    // const fetchedGames: gameInfo[] = await Promise.all(
-    //   result.map(async (element: { gameID: number }) => await getGamesById(element.gameID))
-    // );
 
-    result.forEach(async element => {
-      gam.push(await getGamesById(element.gameID) as never)
-    });
     //@ts-ignore
-    await setGames(gam);
-    await setLoading(false);
+    const fetchedGames: gameInfo[] = await Promise.all(
+      result.map(async (element: { gameID: number }) => await getGamesById(element.gameID))
+    );
+
+
+    //@ts-ignore
+    setGames(fetchedGames);
+    console.log([fetchedGames[0].id]);
+    setLoading(false);
   }
 
   useEffect(() => {
     asyncFunc();
-    console.log(isLoggedIn);
-    console.log(userID);
-  }, []);
+  }, [userID, isLoggedIn, loading]);
 
   let navigation = useNavigation();
-
+  // checkLogin(userID, setLogin);
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#8100cc', dark: '#550087' }}

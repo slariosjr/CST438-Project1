@@ -40,7 +40,7 @@ export default function HomeScreen() {
   useEffect(() => {
     console.log(userID);
     asyncFunc();
-  }, []);
+  }, [isLoggedIn, userID]);
 
   const handleLogin = async () => {
     if (username === '' || password === '') {

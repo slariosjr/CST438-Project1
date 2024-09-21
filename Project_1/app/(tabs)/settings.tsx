@@ -61,7 +61,7 @@ export default function HomeScreen() {
     useEffect(() => {
         console.log(userID);
         asyncFunc();
-    }, []);
+    }, [isLoggedIn, userID]);
 
     const clearDbAlert = async () => {
         Alert.alert('Clear the local database?', 'The data is not recoverable!', [

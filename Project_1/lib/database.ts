@@ -129,6 +129,7 @@ export const addGame = async (db: SQLite.SQLiteDatabase, gameID: number) => {
     try {
         await db.runAsync(addGameSQLInstruction, [gameID]);
     } catch (error) {
+        return;
         console.error(`Error: addGame ${error}`)
         throw error;
     }
@@ -141,6 +142,7 @@ export const addGameToUser = async (db: SQLite.SQLiteDatabase, gameID: number, u
     try {
         await db.runAsync(addGameToUserInstruction, [userID, gameID, formattedDate]);
     } catch (error) {
+        return;
         console.error(`Error: addGameToUser ${error}`)
         throw error;
     }
@@ -196,7 +198,6 @@ export const printAllTables = async (db: SQLite.SQLiteDatabase) => {
 export const loginCheck = async (db: SQLite.SQLiteDatabase, username: string, password: string): Promise<number> => {
     try {
         const user = await db.getFirstAsync(queryUserFromLoginSQLInstruction, [username, password]);
-        console.log(user);
         if (!user) return -1;  // User not found
 
         //@ts-ignore Again Typescript tantrum!
@@ -234,25 +235,31 @@ export const removeGame = async (db: SQLite.SQLiteDatabase, gID: number): Promis
 
 // Yappdollar approved!
 // 小红书! (Xiǎo hóng shū)
-export const checkIfGameInUser = async (db: SQLite.SQLiteDatabase, uID: number, gID: number): Promise<any> => {
+export const checkIfGameInUser = async ( db: SQLite.SQLiteDatabase, uID: number, gID: number
+): Promise<any | null> => {
+    console.log("checkIfGameInUser");
     try {
-        const result = await db.runAsync(checkIfUserHasGame,[uID, gID]);
+        const result = await db.getFirstAsync(checkIfUserHasGame, [uID, gID]);
+        if (!result) {
+            console.log(`No game found for userID: ${uID} and gameID: ${gID}`);
+            return null;
+        }
+        console.log("checkIfGameInUser result:");
         console.log(result);
-        return result;
-    } catch(error) {
-        console.error(`Error: checkIfGameInUser ${error}`)
-        throw error;
+        return result; 
+    } catch (error) {
+        console.error(`Error in checkIfGameInUser: ${error}`);
+        throw error; 
     }
-}
+};
 
 // Yappdollar approved!
 // 小红书! (Xiǎo hóng shū)
 export const getGameInUser = async (db: SQLite.SQLiteDatabase, uID: number | null): Promise<any> => {
     try {
-        const result = await db.getAllAsync(queryGameForUserSQLInstruction,[uID]);
-        console.log(result);
+        const result = await db.getAllAsync(queryGameForUserSQLInstruction, [uID]);
         return result;
-    } catch(error) {
+    } catch (error) {
         console.error(`Error: checkIfGameInUser ${error}`)
         throw error;
     }

@@ -106,7 +106,7 @@ export default function TabTwoScreen() {
     asyncFunc();
     fetchGames();
 
-  }, []);
+  }, [isLoggedIn, userID]);
 
   // Function load more games button press with search
   const loadMoreGames = () => {
