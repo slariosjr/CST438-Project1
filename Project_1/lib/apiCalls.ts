@@ -44,13 +44,13 @@ export const getGames = async (limit: Number, offset: Number, toSearch: string) 
 export const onGameImageClick = (game: gameInfo,
     nav: NavigationProp<ReactNavigation.RootParamList>, uID :number | null) => {
     // navigate to game details page
-
+    console.log(uID);
     // navigate to game details page with parameters
     const coverUrl = game.cover && game.cover.url ? game.cover.url : 'https://static.thenounproject.com/png/11204-200.png';
 
     // Type script is throwing a tantrum over this 
     // @ts-ignore
-    nav.navigate('gameDetails', { gameId: game.id, cover: coverUrl, gameName: game.name, gameStoryline: game.storyline, gameSummary: game.summary, uID});
+    nav.navigate('gameDetails', { gameId: game.id, cover: coverUrl, gameName: game.name, gameStoryline: game.storyline, gameSummary: game.summary, userID: uID});
 };
 
 

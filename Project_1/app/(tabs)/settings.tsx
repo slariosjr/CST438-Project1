@@ -14,6 +14,7 @@ import UserContext, { UserProvider } from '@/app/userContext';
 import { checkLogin, getDB } from '@/lib/user';
 
 let db: SQLiteDatabase;
+// (✿◡‿◡)
 
 export default function HomeScreen() {
     const [isEnabled, setIsEnabled] = useState(false);
@@ -58,6 +59,7 @@ export default function HomeScreen() {
     }
 
     useEffect(() => {
+        console.log(userID);
         asyncFunc();
     }, []);
 
@@ -99,7 +101,6 @@ export default function HomeScreen() {
     }
 
     return (
-        <UserProvider>
             <ParallaxScrollView
                 headerBackgroundColor={{ light: '#8100cc', dark: '#550087' }}
                 headerImage={<Ionicons size={310} name="settings" style={{
@@ -140,6 +141,5 @@ export default function HomeScreen() {
                     </TouchableOpacity>
                 </ThemedView>
             </ParallaxScrollView>
-        </UserProvider>
     );
 }

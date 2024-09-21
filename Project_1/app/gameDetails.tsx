@@ -9,7 +9,7 @@ import React from 'react';
 import { styles } from '@/lib/Style';
 import UserContext, { UserProvider } from '@/app/userContext';
 import { checkLogin, getDB } from '@/lib/user';
-import { addGame, addGameToUser, removeGame, removeGameFromUser } from '@/lib/database';
+import { addGame, addGameToUser, checkIfGameInUser, removeGame, removeGameFromUser } from '@/lib/database';
 import { SQLiteDatabase } from 'expo-sqlite';
 let db: SQLiteDatabase;
 
@@ -19,6 +19,7 @@ export default function GameDetailsScreen(route: RouteProp<ParamListBase>) {
   // Typescript throws a tantrum! 
   // @ts-ignore
   const { gameId, cover, gameName, gameStoryline, gameSummary, userID } = useRoute().params ?? {};
+  console.log(userID)
   let compData: any = [gameId, cover, gameName, gameStoryline, gameSummary];
   // track if game is saved or not
   const [isSaved, setIsSaved] = useState(false);
@@ -38,6 +39,7 @@ export default function GameDetailsScreen(route: RouteProp<ParamListBase>) {
 
   const saveGame = () => {
     // toggle the saved state
+    checkIfGameInUser(db, userID, gameId);
     if(isSaved) {
       Alert.alert(`Unadded Game with Game ID: ${gameId}`);
       removeGame(db, gameId);

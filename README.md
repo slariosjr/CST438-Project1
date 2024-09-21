@@ -3,7 +3,7 @@
 Bun-dle is a app to view your video game collection locally! 
 
 
-You can use this app on Android, IOS, and the Web!
+You can use this app on Android, and on IOS!
 
 <hr>
 
