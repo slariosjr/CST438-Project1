@@ -13,7 +13,7 @@ export default function SignupScreen() {
   const router = useRouter();  // Using useRouter to navigate
 
   const colorScheme: ColorSchemeName = useColorScheme();
-  const buttonColor = colorScheme === 'dark' ? "#ECEDEE" : "#11181C";
+  const buttonColor = colorScheme === 'dark' ? "#d085ed" : "#9d34c7";//light purple color and dark purple for buttons
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
@@ -21,7 +21,7 @@ export default function SignupScreen() {
   const createDB = async () => {
     await createDatabase();
     db = await openDatabaseAsync('app.db');
-    await printAllTables(db);
+    await printAllTables(db);//connects to database
   }
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export default function SignupScreen() {
     }
     addUser(db, newUser)
     Alert.alert('Account created successfully!');
-    router.push('/login');  // Navigate back to Login screen using router.push
+    router.back();  // Navigate back to Login screen using router.push
   };
 
   return (
