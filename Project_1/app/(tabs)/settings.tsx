@@ -80,22 +80,6 @@ export default function HomeScreen() {
         ]);
     }
 
-    const deleteUser = async () => {
-        Alert.alert('Do you want to delete the current user?', 'The data is not recoverable!', [
-            {
-                text: 'Cancel',
-                onPress: () => console.log('Cancel Pressed'),
-                style: 'cancel',
-            },
-            {
-                text: 'Yes', onPress: () => {
-                    Alert.alert("Current User Deleted, returning to login screen");
-                    router.push("/(tabs)/");
-                }
-            },
-        ]);
-    }
-
     const gotoGithub = async () => {
         Linking.openURL('https://github.com/slariosjr/CST438-Project1')
     }
@@ -119,7 +103,6 @@ export default function HomeScreen() {
                         value={isEnabled}
                     />
                 </ThemedView>
-                {isLoggedIn ? (<Button title="Delete user?" onPress={deleteUser} color={"#eb4034"} />) : (<></>)}
                 <Button title="Clear database?" onPress={clearDbAlert} color={"#eb4034"} />
                 <Button title="Load fake data?" onPress={loadFakeData} color={"#006eff"} />
                 <ThemedView style={styles.hr} />

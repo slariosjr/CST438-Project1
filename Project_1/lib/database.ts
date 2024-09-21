@@ -235,8 +235,7 @@ export const removeGame = async (db: SQLite.SQLiteDatabase, gID: number): Promis
 
 // Yappdollar approved!
 // 小红书! (Xiǎo hóng shū)
-export const checkIfGameInUser = async ( db: SQLite.SQLiteDatabase, uID: number, gID: number
-): Promise<any | null> => {
+export const checkIfGameInUser = async ( db: SQLite.SQLiteDatabase, uID: number, gID: number): Promise<any | null> => {
     console.log("checkIfGameInUser");
     try {
         const result = await db.getFirstAsync(checkIfUserHasGame, [uID, gID]);
