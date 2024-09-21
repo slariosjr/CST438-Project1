@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {Button, Switch, Alert, Image, Linking, TouchableOpacity} from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
@@ -9,6 +9,7 @@ import { openDatabaseAsync, SQLiteDatabase } from 'expo-sqlite';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { styles } from '@/lib/Style';
+import React = require('react');
 
 let db: SQLiteDatabase;
 

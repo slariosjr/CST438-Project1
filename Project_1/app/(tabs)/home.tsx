@@ -8,7 +8,7 @@ import { useNavigation } from 'expo-router';
 import { styles } from '@/lib/Style';
 // Just abstracting out code.. 
 import { getGames, onGameImageClick, gameInfo, getGamesById} from '@/lib/apiCalls';
-import React from 'react';
+import React = require('react');
 
 export default function TabTwoScreen() {
   // store the fetched games
@@ -99,7 +99,7 @@ export default function TabTwoScreen() {
         {/* for each game make it a clickable item with the game cover and the name */}
         {games.map((game: gameInfo) => (
           <TouchableOpacity key={game.id} onPress={() => onGameImageClick(game, navigation)}>
-            <View style={styles.gameItem}>
+            <ThemedView style={styles.gameItem}>
               {game.cover?.url ? (
                 <Image
                   source={{ uri: `https:${game.cover.url}` }}
@@ -114,7 +114,7 @@ export default function TabTwoScreen() {
                 />
               )}
               <ThemedText style={styles.gameTitle}>{game.name}</ThemedText>
-            </View>
+            </ThemedView>
           </TouchableOpacity>
         ))}
         {/* button checks if there is more games to show then loads more games */}

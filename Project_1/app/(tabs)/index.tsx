@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { View, Image, StyleSheet, Button, TextInput, Alert, useColorScheme, ColorSchemeName } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Image, Button, TextInput, Alert, useColorScheme, ColorSchemeName } from 'react-native';
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useRouter } from 'expo-router';
-import { addUser, createDatabase, getUserData, loginCheck, printAllTables, resetDB, user} from '@/lib/database';
+import { addGame, addGameToUser, addUser, createDatabase, loginCheck, printAllTables, resetDB, user } from '@/lib/database';
 import { openDatabaseAsync, SQLiteDatabase } from 'expo-sqlite';
 import { styles } from '@/lib/Style';
-import { userData } from '@/lib/user';
+import React = require('react');
 
-let db: SQLiteDatabase; 
+let db: SQLiteDatabase;
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -20,36 +20,49 @@ export default function HomeScreen() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const createDB = async () => {
-    await createDatabase();
-    db = await openDatabaseAsync('app.db');
-    await resetDB(db);
-    let tmp:user = {
+  // Fake user data 
+  const loadFakeData = async () => {
+    let tmp: user = {
       username: "MOTUS",
       password: "PONENS",
     }
     await addUser(db, tmp)
+    let gameDummy: number[] = [
+      991, 987, 26183, 13,
+    ]
+    gameDummy.forEach(async element => {
+      await addGame(db, element);
+    });
+    await addGameToUser(db, gameDummy[0], 1);
+    await addGameToUser(db, gameDummy[1], 1);
+  }
+
+  const createDB = async () => {
+    await createDatabase();
+    db = await openDatabaseAsync('app.db');
+    await resetDB(db);
+    await loadFakeData();
     await printAllTables(db);
   }
 
   useEffect(() => {
     createDB();
-    
+
   }, []);
 
-  const handleLogin = async() => {
+  const handleLogin = async () => {
     if (username === '' || password === '') {
       Alert.alert('Please enter both username and password.');
       return;
     }
 
-    let id:number = await loginCheck(db, username, password);
-    if ( id == -1) {
+    let id: number = await loginCheck(db, username, password);
+    if (id == -1) {
       Alert.alert('Login Failed! Check your username and password!');
       return;
     } else {
       Alert.alert(`Logged in with username: ${username}`);
-      userData = getUserData(db, id);
+      // userData = getUserData(db, id);
     }
 
     router.push('/(tabs)/home');  // Navigate to explore screen after successful login

@@ -1,24 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, FlatList, Alert, StyleSheet, TouchableOpacity } from 'react-native';
-import * as SQLite from 'expo-sqlite';
-import { openDatabaseAsync, SQLiteDatabase } from 'expo-sqlite';
+import { FlatList, ScrollView, StyleSheet } from 'react-native';
+import { openDatabaseAsync } from 'expo-sqlite';
 import { createDatabase, addGame, addGameToUser, printAllTables } from '@/lib/database'; 
 import { SQLiteAnyDatabase } from 'expo-sqlite/build/NativeStatement';
+import { ThemedView } from '@/components/ThemedView';
+import { ThemedText } from '@/components/ThemedText';
+import ParallaxScrollView from '@/components/ParallaxScrollView';
+import { Ionicons } from '@expo/vector-icons';
+import {styles} from '@/lib/Style' 
 
 type Game = {
     gameID: number;
     name: string;
   };
 
-const availableGames = [
-  { gameID: 1, name: 'Game One' },
-  { gameID: 2, name: 'Game Two' },
-  { gameID: 3, name: 'Game Three' },
 
-];
-
-
-const UserLibrary = () => {
+const userLibrary = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
   let db: SQLiteAnyDatabase;
@@ -42,99 +39,36 @@ const UserLibrary = () => {
 
 
   const fetchSavedGames = async () => {
-    try {
-      
-      const savedGames: Game[] = await db.getAllAsync(
-        `SELECT g.* FROM userToGame ug INNER JOIN game g ON ug.gameID = g.gameID WHERE ug.userID = ?`,
-        [1] 
-      );
-      setGames(savedGames);
-    } catch (error) {
-      console.error('Error fetching saved games:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-
-  const handleAddGame = async (gameID: number) => {
-    try {
-      await addGame(db, gameID); 
-      await addGameToUser(db, gameID, 1); 
-      Alert.alert('Game added successfully!');
-      fetchSavedGames(); 
-    } catch (error) {
-      console.error('Error adding game:', error);
-      Alert.alert('Failed to add game.');
-    }
+    
   };
 
 
   if (loading) {
-    return <Text>Loading your games...</Text>;
+    return <ThemedText>Loading your games...</ThemedText>;
   }
 
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Available Games</Text>
-      <FlatList
-        data={availableGames}
-        keyExtractor={(item) => item.gameID.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.gameItem}
-            onPress={() => handleAddGame(item.gameID)}
-          >
-            <Text style={styles.gameName}>{item.name}</Text>
-          </TouchableOpacity>
-        )}
-      />
-      <Text style={styles.title}>Your Library</Text>
+    <ParallaxScrollView
+    headerBackgroundColor={{ light: '#8100cc', dark: '#550087' }}
+      headerImage={<Ionicons size={310} name="game-controller" style={styles.headerImage} />}>
+      <ThemedText type='title'>Your Library</ThemedText>
       {games.length === 0 ? (
-        <Text>No games added to your library yet.</Text>
+        <ThemedText>No games added to your library yet.</ThemedText>
       ) : (
-        <FlatList
+        <ScrollView contentContainerStyle={styles.gameList}
           data={games}
           keyExtractor={(item) => item.gameID.toString()}
           renderItem={({ item }) => (
-            <View style={styles.gameContainer}>
-              <Text style={styles.gameName}>{item.name || 'Unknown Game'}</Text>
-            </View>
+            <ThemedView style={styles.gameItem}>
+              <ThemedText style={styles.gameTitle}>{item.name || 'Unknown Game'}</ThemedText>
+            </ThemedView>
           )}
         />
       )}
-    </View>
+    </ParallaxScrollView>
   );
 };
 
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    backgroundColor: '#f9f9f9',
-    flex: 1,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  gameItem: {
-    padding: 10,
-    backgroundColor: '#ddd',
-    marginBottom: 10,
-    borderRadius: 5,
-  },
-  gameContainer: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderColor: '#ccc',
-  },
-  gameName: {
-    fontSize: 18,
-  },
-});
-
-
-export default UserLibrary;
+export default userLibrary;

@@ -37,7 +37,7 @@ const addGameSQLInstruction: string = `
     INSERT INTO game (gameID) VALUES (?)`;
 
 const addGameToUserInstruction: string = `
-    INSERT INTO userToGame (userID, gameID, DATE) VALUES (?, ?, ?)`;
+    INSERT INTO userToGame (userID, gameID, dateAdded) VALUES (?, ?, ?)`;
 
 const queryUserFromPasswordSQLInstruction: string = `
     SELECT * FROM userInfo WHERE password = ?;`;
