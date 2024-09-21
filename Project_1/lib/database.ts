@@ -1,5 +1,8 @@
 import * as SQLite from 'expo-sqlite';
 
+// https://youtu.be/N-7gbWKbXbQ?si=Usg79F4dyHVUW-EJ
+// - Alex
+
 export type user = {
     username: string,
     password: string,
@@ -107,15 +110,9 @@ const executeSQL = async (db: SQLite.SQLiteDatabase, sqlInstruction: string): Pr
 
 export const addUser = async (db: SQLite.SQLiteDatabase, userData: user): Promise<boolean> => {
     try {
-        // Okay Check if username exists 
         const ifUserNameExists = await db.getFirstAsync(queryGameForUserSQLInstruction, [userData.username]);
         if (ifUserNameExists) return false;
-        // Check if email exists
-        // const ifEmailAlreadyExists = await db.getFirstAsync(queryUserFromEmailSQLInstruction, [userData.email]);
-        // if (ifEmailAlreadyExists) return false;
 
-
-        // Then finally insert
         await db.runAsync(addUserSQLInstruction, [userData.username, userData.password]);
         return true;
     } catch (error) {
@@ -145,7 +142,7 @@ export const addGameToUser = async (db: SQLite.SQLiteDatabase, gameID: number, u
     }
 }
 
-export const removeUser = async (db: SQLite.SQLiteDatabase, password: string): Promise<boolean> => {
+export const removeUserbyPassword = async (db: SQLite.SQLiteDatabase, password: string): Promise<boolean> => {
     try {
         // Check if account exists
         const user = await db.getFirstAsync(queryUserFromPasswordSQLInstruction, [password]);
@@ -191,7 +188,7 @@ export const printAllTables = async (db: SQLite.SQLiteDatabase) => {
 
 }
 
-export const loginCheck = async (db: SQLite.SQLiteDatabase, username: string, password: string):Promise<number> => {
+export const loginCheck = async (db: SQLite.SQLiteDatabase, username: string, password: string): Promise<number> => {
     try {
         const user = await db.getFirstAsync(queryUserFromLoginSQLInstruction, [username, password]);
         console.log(user);
@@ -208,4 +205,28 @@ export const loginCheck = async (db: SQLite.SQLiteDatabase, username: string, pa
 export const getUserData = async (db: SQLite.SQLiteDatabase, uID: number): Promise<any> => {
     const userData = await db.getFirstAsync(queryUserFromUserIDSQLInstruction, [uID]);
     return userData;
-  };
+};
+
+export const removeGameFromUser = async (db: SQLite.SQLiteDatabase, uID: number, gID: number): Promise<boolean> => {
+    try {
+        await db.runAsync(removeGameFromUserSQLInstruction, [uID, gID]);
+        return true;
+    } catch (error) {
+        console.error(`Error: ${error}`)
+        throw error;
+    }
+};
+
+export const removeGame = async (db: SQLite.SQLiteDatabase, gID: number): Promise<boolean> => {
+    try {
+        await db.runAsync(removeGameSQLInstruction, [gID]);
+        return true;
+    } catch (error) {
+        console.error(`Error: ${error}`)
+        throw error;
+    }
+};
+
+export const checkIfGameInUser = async(db: SQLite.SQLiteDatabase, uID: number, gID: number) => {
+
+}

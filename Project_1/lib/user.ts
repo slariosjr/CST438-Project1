@@ -1,15 +1,17 @@
-import { user } from "@/lib/database";
+import { openDatabaseAsync, SQLiteDatabase } from "expo-sqlite";
+import { createDatabase, printAllTables } from "./database";
 
-// // Globals defined here YES I KNOW THERE BAD, but time constrants.
+// Checking if logged in!
+export const checkLogin = async (userID: number | null, state: React.Dispatch<React.SetStateAction<boolean>>) => {
+    if (userID === null || userID === -1) {
+        await state(false);
+    } else state(true);
+}
 
-// // Self explanatory
-// export let userData: any= {};
-
-// // again bery self explanatory
-// export let isUserLoggedIn: boolean = false;
-
-// // WAITER I NEED MORE SOJU!
-// export let gamesCache: any[] = [];
-
-// // I like the palmagranic kind. 
-// export let currentGamesIDList:number[] = [];
+// We need to get the database some how soo! 
+export const getDB = async(): Promise<SQLiteDatabase> => {
+    await createDatabase();
+    const db = await openDatabaseAsync('app.db');
+    await printAllTables(db);
+    return db;
+}

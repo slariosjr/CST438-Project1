@@ -1,29 +1,52 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import {Image, Button, TouchableOpacity, View, ScrollView, TextInput } from 'react-native';
+import { Image, Button, TouchableOpacity, View, ScrollView, TextInput } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import {createContext, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { router, useNavigation } from 'expo-router';
 import { styles } from '@/lib/Style';
-// Just abstracting out code.. 
-import { getGames, onGameImageClick, gameInfo, getGamesById} from '@/lib/apiCalls';
+import { getGames, onGameImageClick, gameInfo, getGamesById } from '@/lib/apiCalls';
 import UserContext, { UserProvider } from '../userContext';
 import React from 'react';
+import { SQLiteDatabase } from 'expo-sqlite';
+import { checkLogin, getDB } from '@/lib/user';
 
 
+let db: SQLiteDatabase;
 
+// https://youtu.be/-UHUTsx-WCU?si=3-CXjnbGJ9AqvNuS
+// AM a fucking rockstar! my react code sucks. 🎸🔥
+// - Alex @ 9/21/2024 - 3:27AM
+/*
 
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣦⣄⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⡿⠃⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠭⠚⠿⣋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡜⠀⠱⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡐⠀⠀⠀⠑⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⣄⠀⠀⠀⠀⠀⡰⣠⠼⠚⠛⢦⣜⣆⠀⠀⠀⠀⢠⠧⢴⣶⡆
+⠰⠿⠛⠹⠀⠀⠀⠀⡰⡹⠃⠀⢠⠀⠀⠙⢭⣧⡀⠀⠀⠀⠳⡀⠈⠀
+⠀⠀⡠⠃⠀⢀⣀⡴⠙⠷⢄⠀⢸⠆⠀⣠⠾⠉⠹⣶⠦⢤⣀⡇⠀⠀
+⠀⠀⠉⠉⠉⠉⡰⠧⠀⠀⡵⣯⠿⠿⣭⠯⠤⠤⠤⠬⣆⠀⠈⠀⠀⠀
+⠀⠀⠀⠀⠀⣰⣁⣁⣀⣀⣄⣛⠉⠉⢟⠈⡄⠀⠀⠀⢈⣆⠀⠀⠀⠀
+⠀⠀⠀⠀⡰⡇⡘⠀⠀⠀⣰⣀⣀⣀⣀⣀⣇⣀⣀⣀⣆⣋⡂⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢆⠀⠀⠀⠘⠒⢲⠆⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⡀⠀⠀⠀⠸⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⡇⠀⠀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀
+
+*/
 
 export default function TabTwoScreen() {
   // store the fetched games
   const [games, setGames] = useState([]);
   // keep track of offset of where we left off
-  const [offset, setOffset] = useState(0); 
+  const [offset, setOffset] = useState(0);
   // track the loading state
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
   // see if more games are able to fetch
-  const [hasMore, setHasMore] = useState(true); 
+  const [hasMore, setHasMore] = useState(true);
   // search state 
   const [search, setSearch] = useState('');
   const [isLoggedIn, setLogin] = useState(false);
@@ -31,20 +54,12 @@ export default function TabTwoScreen() {
   const userContext = useContext(UserContext);
   if (!userContext) {
     console.log(`${UserProvider}`);
-    throw new Error('UserContext must be used within a UserProvider' );
+    throw new Error('UserContext must be used within a UserProvider');
   }
   const { userID, setUser } = userContext;
-  
+
 
   // Function: fetch games and update state
-
-  const checkLogin = async() => { 
-    console.log(userID);
-    if(userID === null || userID === -1) {
-      setLogin(false);
-    } else setLogin(true);
-  }
-
   const fetchGames = async (search = '') => {
     console.log("Fetch game called!")
     if (loading || !hasMore) return;
@@ -76,13 +91,18 @@ export default function TabTwoScreen() {
       setLoading(false);
     }
   }
-  
+
   // fetch that immediately puts 10 games on the screen of the home page
+  const asyncFunc = async () => {
+    await checkLogin(userID, setLogin);
+    db = await getDB();
+  }
+
   useEffect(() => {
-    checkLogin();
+    asyncFunc();
     fetchGames();
-    
-  }, []); 
+
+  }, []);
 
   // Function load more games button press with search
   const loadMoreGames = () => {
@@ -107,24 +127,24 @@ export default function TabTwoScreen() {
         <ThemedView style={styles.titleContainer}>
           <ThemedText type="title">All Games</ThemedText>
         </ThemedView>
-      {/* Search Bar */}
-      {isLoggedIn ? (
-        <>
-          <View style={styles.searchContainer}>
-            <TextInput
-              style = {styles.searchInput}
-              placeholder = "Search for a game!"
-              value = {search}
-              onChangeText = {setSearch}
-            />
-            <TouchableOpacity onPress={handleSearch}>
-              <Ionicons name="search" size={24} color="black" />
-            </TouchableOpacity>
-          </View>
+        {/* Search Bar */}
+        {isLoggedIn ? (
+          <>
+            <View style={styles.searchContainer}>
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Search for a game!"
+                value={search}
+                onChangeText={setSearch}
+              />
+              <TouchableOpacity onPress={handleSearch}>
+                <Ionicons name="search" size={24} color="black" />
+              </TouchableOpacity>
+            </View>
             <ScrollView contentContainerStyle={styles.gameList}>
               {/* for each game make it a clickable item with the game cover and the name */}
               {games.map((game: gameInfo) => (
-                <TouchableOpacity key={game.id} onPress={() => onGameImageClick(game, navigation)}>
+                <TouchableOpacity key={game.id} onPress={() => onGameImageClick(game, navigation, userID)}>
                   <ThemedView style={styles.gameItem}>
                     {game.cover?.url ? (
                       <Image
@@ -148,14 +168,14 @@ export default function TabTwoScreen() {
                 <Button title="Load More Games" onPress={loadMoreGames} disabled={loading} />
               )}
             </ScrollView>
-        </>
-        ):(<>
+          </>
+        ) : (<>
           <ThemedText>Please log in...</ThemedText>
           <Button title="Login!" onPress={async () => {
             router.push("/(tabs)/")
           }} />
         </>)}
       </ParallaxScrollView>
-      </UserProvider>
+    </UserProvider>
   );
 }

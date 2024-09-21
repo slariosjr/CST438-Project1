@@ -42,7 +42,7 @@ export const getGames = async (limit: Number, offset: Number, toSearch: string) 
 
 // when game is clicked, bring user to a game details page with the game ID 
 export const onGameImageClick = (game: gameInfo,
-    nav: NavigationProp<ReactNavigation.RootParamList>) => {
+    nav: NavigationProp<ReactNavigation.RootParamList>, uID :number | null) => {
     // navigate to game details page
 
     // navigate to game details page with parameters
@@ -50,7 +50,7 @@ export const onGameImageClick = (game: gameInfo,
 
     // Type script is throwing a tantrum over this 
     // @ts-ignore
-    nav.navigate('gameDetails', { gameId: game.id, cover: coverUrl, gameName: game.name, gameStoryline: game.storyline, gameSummary: game.summary });
+    nav.navigate('gameDetails', { gameId: game.id, cover: coverUrl, gameName: game.name, gameStoryline: game.storyline, gameSummary: game.summary, uID});
 };
 
 
