@@ -193,9 +193,6 @@ export const printAllTables = async (db: SQLite.SQLiteDatabase) => {
 
 export const loginCheck = async (db: SQLite.SQLiteDatabase, username: string, password: string):Promise<number> => {
     try {
-        console.log(username);
-        console.log(password);
-        console.log(queryUserFromLoginSQLInstruction);
         const user = await db.getFirstAsync(queryUserFromLoginSQLInstruction, [username, password]);
         console.log(user);
         if (!user) return -1;  // User not found

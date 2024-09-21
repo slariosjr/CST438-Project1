@@ -2,14 +2,14 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { StyleSheet, Button, Alert} from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ParamListBase, RouteProp, useRoute } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigation } from 'expo-router';
 import GameDetailsComp from '@/components/gameDetailComp'
 import React from 'react';
 import { createDatabase, printAllTables } from '@/lib/database';
 import { openDatabaseAsync } from 'expo-sqlite';
 import { styles } from '@/lib/Style';
-
+import UserContext, { UserProvider } from '@/app/userContext';
 let db;
 
 export default function GameDetailsScreen(route: RouteProp<ParamListBase>) {
@@ -21,6 +21,7 @@ export default function GameDetailsScreen(route: RouteProp<ParamListBase>) {
   let compData: any = [gameId, cover, gameName, gameStoryline, gameSummary];
   // track if game is saved or not
   const [isSaved, setIsSaved] = useState(false);
+  
   let navigation = useNavigation();
 
   const createDB = async () => {
@@ -30,6 +31,7 @@ export default function GameDetailsScreen(route: RouteProp<ParamListBase>) {
   }
 
   useEffect(() => {
+    checkLogin();
     createDB();
     
   }, []);

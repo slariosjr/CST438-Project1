@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, createContext, useContext, useState } from 'react';
 import { Image, Button, TextInput, Alert, useColorScheme, ColorSchemeName } from 'react-native';
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -8,7 +8,9 @@ import { useRouter } from 'expo-router';
 import { addGame, addGameToUser, addUser, createDatabase, loginCheck, printAllTables, resetDB, user } from '@/lib/database';
 import { openDatabaseAsync, SQLiteDatabase } from 'expo-sqlite';
 import { styles } from '@/lib/Style';
-import React = require('react');
+import React from 'react';
+import UserContext, { UserProvider } from '@/app/userContext';
+
 
 let db: SQLiteDatabase;
 
@@ -16,9 +18,16 @@ export default function HomeScreen() {
   const router = useRouter();
   const colorScheme: ColorSchemeName = useColorScheme();
   const buttonColor = colorScheme === 'dark' ? "#ECEDEE" : "#11181C";
-
+  const [isLoggedIn, setLogin] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const userContext = useContext(UserContext);
+  if (!userContext) {
+    console.log(`${UserProvider}`);
+    throw new Error('UserContext must be used within a UserProvider' );
+  }
+  const { userID, setUser } = userContext;
 
   // Fake user data 
   const loadFakeData = async () => {
@@ -26,7 +35,12 @@ export default function HomeScreen() {
       username: "MOTUS",
       password: "PONENS",
     }
+    let tmp1: user = {
+      username: "e1",
+      password: "2",
+    }
     await addUser(db, tmp)
+    await addUser(db, tmp1)
     let gameDummy: number[] = [
       991, 987, 26183, 13,
     ]
@@ -35,6 +49,12 @@ export default function HomeScreen() {
     });
     await addGameToUser(db, gameDummy[0], 1);
     await addGameToUser(db, gameDummy[1], 1);
+  }
+
+  const checkLogin = async() => { 
+    if(userID == -1|| userID === null) {
+      setLogin(false);
+    } else setLogin(true);
   }
 
   const createDB = async () => {
@@ -46,6 +66,7 @@ export default function HomeScreen() {
   }
 
   useEffect(() => {
+    checkLogin();
     createDB();
 
   }, []);
@@ -61,15 +82,21 @@ export default function HomeScreen() {
       Alert.alert('Login Failed! Check your username and password!');
       return;
     } else {
+      console.log(id);
+      await setUser(id);
+
+      console.log(userID);
       Alert.alert(`Logged in with username: ${username}`);
-      // userData = getUserData(db, id);
     }
 
-    router.push('/(tabs)/home');  // Navigate to explore screen after successful login
+    // router.push('/(tabs)/home'); 
   };
 
 
   return (
+    <>
+    {/* @ts-ignore */}
+    <UserProvider>
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#8100cc', dark: '#550087' }}
       headerImage={
@@ -101,8 +128,10 @@ export default function HomeScreen() {
           onChangeText={setPassword}
         />
       </ThemedView>
-
-      <Button title="Login!" onPress={handleLogin} />
+      {isLoggedIn? (<Button title="Log out?" onPress={() => {
+        setUser(-1);
+      }} />) : (<Button title="Login!" onPress={handleLogin} />)}
+      
 
 
       <Button
@@ -110,5 +139,7 @@ export default function HomeScreen() {
         onPress={() => router.push('/createAccount')}  // Navigate to Create Account screen
       />
     </ParallaxScrollView>
+    </UserProvider>
+    </>
   );
 }

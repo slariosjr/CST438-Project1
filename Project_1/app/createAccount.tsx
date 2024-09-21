@@ -6,6 +6,7 @@ import { openDatabaseAsync, SQLiteDatabase } from 'expo-sqlite';
 import { styles } from '@/lib/Style';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
+import UserContext, { UserProvider } from '@/app/userContext';
 
 let db: SQLiteDatabase; 
 
@@ -39,7 +40,7 @@ export default function SignupScreen() {
     }
     addUser(db, newUser)
     Alert.alert('Account created successfully!');
-    router.push('/login');  // Navigate back to Login screen using router.push
+    router.push('/(tabs)/');  // Navigate back to Login screen using router.push
   };
 
   return (

@@ -3,12 +3,17 @@ import {Image, Button, TouchableOpacity, View, ScrollView, TextInput } from 'rea
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { useCallback, useEffect, useState } from 'react';
-import { useNavigation } from 'expo-router';
+import {createContext, useContext, useEffect, useState } from 'react';
+import { router, useNavigation } from 'expo-router';
 import { styles } from '@/lib/Style';
 // Just abstracting out code.. 
 import { getGames, onGameImageClick, gameInfo, getGamesById} from '@/lib/apiCalls';
-import React = require('react');
+import UserContext, { UserProvider } from '../userContext';
+import React from 'react';
+
+
+
+
 
 export default function TabTwoScreen() {
   // store the fetched games
@@ -21,8 +26,25 @@ export default function TabTwoScreen() {
   const [hasMore, setHasMore] = useState(true); 
   // search state 
   const [search, setSearch] = useState('');
+  const [isLoggedIn, setLogin] = useState(false);
+
+  const userContext = useContext(UserContext);
+  if (!userContext) {
+    console.log(`${UserProvider}`);
+    throw new Error('UserContext must be used within a UserProvider' );
+  }
+  const { userID, setUser } = userContext;
+  
 
   // Function: fetch games and update state
+
+  const checkLogin = async() => { 
+    console.log(userID);
+    if(userID === null || userID === -1) {
+      setLogin(false);
+    } else setLogin(true);
+  }
+
   const fetchGames = async (search = '') => {
     console.log("Fetch game called!")
     if (loading || !hasMore) return;
@@ -57,6 +79,7 @@ export default function TabTwoScreen() {
   
   // fetch that immediately puts 10 games on the screen of the home page
   useEffect(() => {
+    checkLogin();
     fetchGames();
     
   }, []); 
@@ -77,51 +100,62 @@ export default function TabTwoScreen() {
   let navigation = useNavigation();
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#8100cc', dark: '#550087' }}
-      headerImage={<Ionicons size={310} name="game-controller" style={styles.headerImage} />}>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">All Games</ThemedText>
-      </ThemedView>
-    {/* Search Bar */}
-    <View style={styles.searchContainer}>
-      <TextInput
-        style = {styles.searchInput}
-        placeholder = "Search for a game!"
-        value = {search}
-        onChangeText = {setSearch}
-      />
-      <TouchableOpacity onPress={handleSearch}>
-        <Ionicons name="search" size={24} color="black" />
-      </TouchableOpacity>
-    </View>
-      <ScrollView contentContainerStyle={styles.gameList}>
-        {/* for each game make it a clickable item with the game cover and the name */}
-        {games.map((game: gameInfo) => (
-          <TouchableOpacity key={game.id} onPress={() => onGameImageClick(game, navigation)}>
-            <ThemedView style={styles.gameItem}>
-              {game.cover?.url ? (
-                <Image
-                  source={{ uri: `https:${game.cover.url}` }}
-                  style={styles.gameIcon}
-                  resizeMode="cover"
-                />
-              ) : (
-                <Image
-                  source={{ uri: `https://static.thenounproject.com/png/11204-200.png` }}
-                  style={styles.gameIcon}
-                  resizeMode="cover"
-                />
+    <UserProvider>
+      <ParallaxScrollView
+        headerBackgroundColor={{ light: '#8100cc', dark: '#550087' }}
+        headerImage={<Ionicons size={310} name="game-controller" style={styles.headerImage} />}>
+        <ThemedView style={styles.titleContainer}>
+          <ThemedText type="title">All Games</ThemedText>
+        </ThemedView>
+      {/* Search Bar */}
+      {isLoggedIn ? (
+        <>
+          <View style={styles.searchContainer}>
+            <TextInput
+              style = {styles.searchInput}
+              placeholder = "Search for a game!"
+              value = {search}
+              onChangeText = {setSearch}
+            />
+            <TouchableOpacity onPress={handleSearch}>
+              <Ionicons name="search" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
+            <ScrollView contentContainerStyle={styles.gameList}>
+              {/* for each game make it a clickable item with the game cover and the name */}
+              {games.map((game: gameInfo) => (
+                <TouchableOpacity key={game.id} onPress={() => onGameImageClick(game, navigation)}>
+                  <ThemedView style={styles.gameItem}>
+                    {game.cover?.url ? (
+                      <Image
+                        source={{ uri: `https:${game.cover.url}` }}
+                        style={styles.gameIcon}
+                        resizeMode="cover"
+                      />
+                    ) : (
+                      <Image
+                        source={{ uri: `https://static.thenounproject.com/png/11204-200.png` }}
+                        style={styles.gameIcon}
+                        resizeMode="cover"
+                      />
+                    )}
+                    <ThemedText style={styles.gameTitle}>{game.name}</ThemedText>
+                  </ThemedView>
+                </TouchableOpacity>
+              ))}
+              {/* button checks if there is more games to show then loads more games */}
+              {hasMore && (
+                <Button title="Load More Games" onPress={loadMoreGames} disabled={loading} />
               )}
-              <ThemedText style={styles.gameTitle}>{game.name}</ThemedText>
-            </ThemedView>
-          </TouchableOpacity>
-        ))}
-        {/* button checks if there is more games to show then loads more games */}
-        {hasMore && (
-          <Button title="Load More Games" onPress={loadMoreGames} disabled={loading} />
-        )}
-      </ScrollView>
-    </ParallaxScrollView>
+            </ScrollView>
+        </>
+        ):(<>
+          <ThemedText>Please log in...</ThemedText>
+          <Button title="Login!" onPress={async () => {
+            router.push("/(tabs)/")
+          }} />
+        </>)}
+      </ParallaxScrollView>
+      </UserProvider>
   );
 }
