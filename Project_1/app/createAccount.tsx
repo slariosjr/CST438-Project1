@@ -11,10 +11,10 @@ import { getDB } from '@/lib/user';
 let db: SQLiteDatabase;
 
 export default function SignupScreen() {
-  const router = useRouter();  // Using useRouter to navigate
-
+  const router = useRouter();  // Using useRouter to navigate\
   const colorScheme: ColorSchemeName = useColorScheme();
   const buttonColor = colorScheme === 'dark' ? "#ECEDEE" : "#11181C";
+  const ifDark = (colorScheme === 'dark')
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   // const [isLoggedIn, setLogin] = useState(false);
@@ -48,14 +48,14 @@ export default function SignupScreen() {
     <ThemedView style={styles.inputContainer}>
       <ThemedText style={styles.title}>Create Account</ThemedText>
       <TextInput
-        style={styles.input}
+        style={(ifDark ? (styles.Dinput) : (styles.Winput))}
         placeholderTextColor={buttonColor}
         placeholder="Username"
         value={username}
         onChangeText={setUsername}
       />
       <TextInput
-        style={styles.input}
+        style={(ifDark ? (styles.Dinput) : (styles.Winput))}
         placeholderTextColor={buttonColor}
         placeholder="Password"
         secureTextEntry
@@ -63,7 +63,7 @@ export default function SignupScreen() {
         onChangeText={setPassword}
       />
       <TextInput
-        style={styles.input}
+        style={(ifDark ? (styles.Dinput) : (styles.Winput))}
         placeholderTextColor={buttonColor}
         placeholder="Confirm Password"
         secureTextEntry

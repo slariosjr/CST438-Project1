@@ -71,6 +71,24 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 8,
     borderRadius: 4,
   },
+  Winput: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 12,
+    paddingHorizontal: 8,
+    borderRadius: 4,
+    color: 'black'
+  },
+  Dinput: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 12,
+    paddingHorizontal: 8,
+    borderRadius: 4,
+    color: 'white'
+  },
   reactLogo: {
     height: 160,
     width: 350,

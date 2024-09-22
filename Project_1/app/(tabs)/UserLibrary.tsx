@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Button, FlatList, ScrollView, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { Button, FlatList, ScrollView, StyleSheet, Image, TouchableOpacity, LogBox } from 'react-native';
 import { createDatabase, addGame, addGameToUser, printAllTables, getGameInUser } from '@/lib/database';
 import { SQLiteAnyDatabase } from 'expo-sqlite/build/NativeStatement';
 import { ThemedView } from '@/components/ThemedView';
@@ -19,9 +19,11 @@ type Game = {
 
 
 const userLibrary = () => {
+  LogBox.ignoreAllLogs();
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isLoggedIn, setLogin] = useState(false);
+  const [, setCount] = useState(0);
   //@ts-ignore
   const userContext = useContext(UserContext);
   if (!userContext) {
@@ -91,6 +93,23 @@ const userLibrary = () => {
                     </ThemedView>
                   </TouchableOpacity>
                 ))}
+                <Button title="Refresh!" onPress={async () => {
+                  try {
+                    setLoading(true);
+                    //@ts-ignore
+                    const result = await getGameInUser(db, userID);
+                    
+                    const fetchedGames: gameInfo[] = await Promise.all(
+                      result.map(async (element: { gameID: number }) => await getGamesById(element.gameID))
+                    );
+                    //@ts-ignore
+                    setGames(fetchedGames);
+                  } catch (error) {
+                    setLoading(false);
+                    console.error("ERROR IN RELOAD: ", error);
+                  }
+                  setLoading(false);
+                }}></Button>
               </ScrollView>
             )}
           </>

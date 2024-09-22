@@ -255,7 +255,7 @@ export const checkIfGameInUser = async ( db: SQLite.SQLiteDatabase, uID: number,
 // Yappdollar approved!
 // 小红书! (Xiǎo hóng shū)
 export const getGameInUser = async (db: SQLite.SQLiteDatabase, uID: number | null): Promise<any> => {
-    try {
+    try { 
         const result = await db.getAllAsync(queryGameForUserSQLInstruction, [uID]);
         return result;
     } catch (error) {

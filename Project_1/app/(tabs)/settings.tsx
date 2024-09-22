@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
-import { Button, Switch, Alert, Image, Linking, TouchableOpacity } from 'react-native';
+import { Button, Switch, Alert, Image, Linking, TouchableOpacity, LogBox } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -79,7 +79,7 @@ export default function HomeScreen() {
             },
         ]);
     }
-
+    LogBox.ignoreAllLogs();
     const gotoGithub = async () => {
         Linking.openURL('https://github.com/slariosjr/CST438-Project1')
     }
