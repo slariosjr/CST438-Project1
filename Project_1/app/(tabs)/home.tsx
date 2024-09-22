@@ -1,5 +1,5 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Image, Button, TouchableOpacity, View, ScrollView, TextInput } from 'react-native';
+import { Image, Button, TouchableOpacity, View, ScrollView, TextInput, LogBox } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -60,7 +60,7 @@ export default function TabTwoScreen() {
   }
   const { userID, setUser } = userContext;
 
-
+  LogBox.ignoreAllLogs();
   // Function: fetch games and update state
   const fetchGames = async (search = '') => {
     // Me and graeme had a stroke trying to fix this, to only find out that this query had a offset variable! 

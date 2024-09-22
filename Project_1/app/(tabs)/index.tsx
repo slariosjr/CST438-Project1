@@ -1,5 +1,5 @@
 import { useEffect, createContext, useContext, useState } from 'react';
-import { Image, Button, TextInput, Alert, useColorScheme, ColorSchemeName } from 'react-native';
+import { Image, Button, TextInput, Alert, useColorScheme, ColorSchemeName, LogBox } from 'react-native';
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
@@ -21,6 +21,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const colorScheme: ColorSchemeName = useColorScheme();
   const buttonColor = colorScheme === 'dark' ? "#ECEDEE" : "#11181C";
+  const ifDark = (colorScheme === 'dark')
   const [isLoggedIn, setLogin] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -60,7 +61,7 @@ export default function HomeScreen() {
 
     router.push('/(tabs)/home');
   };
-
+  LogBox.ignoreAllLogs();
 
   return (
     <>
@@ -88,15 +89,17 @@ export default function HomeScreen() {
 
             <ThemedView style={styles.inputContainer}>
               <TextInput
+                style={(ifDark ? (styles.Dinput) : (styles.Winput))}
                 placeholderTextColor={buttonColor}
-                style={styles.input}
+                selectionColor={buttonColor}
                 placeholder="Username"
                 value={username}
                 onChangeText={setUsername}
               />
               <TextInput
+                style={(ifDark ? (styles.Dinput) : (styles.Winput))}
                 placeholderTextColor={buttonColor}
-                style={styles.input}
+                selectionColor={buttonColor}
                 placeholder="Password"
                 value={password}
                 secureTextEntry
