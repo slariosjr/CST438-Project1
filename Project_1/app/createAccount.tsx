@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TextInput, Button, Alert, ColorSchemeName, useColorScheme } from 'react-native';
 import { useRouter } from 'expo-router';  // Use useRouter instead of navigation
 import { addUser, user } from '@/lib/database';
@@ -6,8 +6,7 @@ import { SQLiteDatabase } from 'expo-sqlite';
 import { styles } from '@/lib/Style';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
-import UserContext, { UserProvider } from '@/app/userContext';
-import { checkLogin, getDB } from '@/lib/user';
+import { getDB } from '@/lib/user';
 
 let db: SQLiteDatabase;
 
@@ -18,16 +17,11 @@ export default function SignupScreen() {
   const buttonColor = colorScheme === 'dark' ? "#ECEDEE" : "#11181C";
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [isLoggedIn, setLogin] = useState(false);
+  // const [isLoggedIn, setLogin] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState<string>('');
-  const userContext = useContext(UserContext);
-  if (!userContext) {
-    console.log(`${UserProvider}`);
-    throw new Error('UserContext must be used within a UserProvider');
-  }
-  const { userID, setUser } = userContext;
+
   const asyncFunc = async () => {
-    await checkLogin(userID, setLogin);
+    // await checkLogin(userID, setLogin);
     db = await getDB();
   }
 
