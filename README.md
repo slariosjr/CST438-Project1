@@ -107,32 +107,32 @@ My role on this project was creating the Login and create Account pages.
 #### What was your role / which stories did you work on
 
 + What was the biggest challenge? 
-  + 
+  + The biggest challenge was fixing all the errors my code had along the way.
 + Why was it a challenge?
-   +    
+   +    It was a challenge becuase half of the time I had no idea how to fix the error and when I went online for help, I got more confused and lost.
   + How was the challenge addressed?.
-     + 
+     + The challenge was addressed but doing a lot of reading through the web.
 + Favorite / most interesting part of this project
-   + 
+   + Favorite part of the project was seeing everything come together at the end.
 + If you could do it over, what would you change?
-   + 
+   + Spend more time learning React before diving in right away.
 + What is the most valuable thing you learned?
-   + 
+   + How to use git in a team based environment.
 
 ## Conclusion
 - How successful was the project?
    - Alex: The full project minus some features, that aren't really needed for MVP goal.  
    - Kyla: We were able to have a login, home, and settings tab.
    - Silvia: With the time frame it was very successfull in my eyes we got a lot of things done.
-   - Sergio:
+   - Sergio: I belive the project was successfull even with all the errors along the way.
 - Think in terms of what did you set out to do and what actually got done?
   - Alex: I wore many hats, dependng on the weather. Am actually really happy for how the database turned out, and doing the last round of polish before its due is satisifing. 
   - Kyla: I was set out to work on the home page and API integration and I was able to get the home page done.
   - Silvia: Was able to accomplish the login and create account to work with the login screen.
-  - Sergio:
+  - Sergio: I was set out to do the database, unit testing, and game libray. Out of thoes I was able to get the library down.
 - What was the largest victory?
    - Alex: When The database was programmed in one day, and the last features was programed in a drunken all nigher. Fundamentally proving the blamer peak is not a myth but the truth. Its going to be a fun story am gonna randomly pull out of nowhere. I remember logging into warframe after pushing my last PR, and it was well earned. 
    - Kyla: I thought the largest victory was when the database was integrated into the project. 
    - Silvia: Getting the database integrated with the project shoutout to Alex! 
-   - Sergio:
+   - Sergio: Getting the database to work properly. My version of the database was way off to the current database used in the application.
 - Final assessment of the project
